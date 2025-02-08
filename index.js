@@ -930,3 +930,34 @@ exports.handler = async (event) => {
   }
 
 };
+
+
+// const fs = require("fs");
+// const { PDFDocument } = require("pdf-lib");
+
+async function base64ToPDF(inputFile, outputFile) {
+    try {
+        // Read the Base64 string from the file
+        const base64String = fs.readFileSync(inputFile, "utf-8").trim();
+
+        // Remove metadata if present (like 'data:application/pdf;base64,')
+        const base64Data = base64String.replace(/^data:application\/pdf;base64,/, "");
+
+        // Convert Base64 string to a Uint8Array (binary data)
+        const pdfBytes = Buffer.from(base64Data, "base64");
+
+        // Load PDF document from the decoded bytes
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+
+        // Save the PDF document
+        const savedPdfBytes = await pdfDoc.save();
+        fs.writeFileSync(outputFile, savedPdfBytes);
+
+        console.log(`✅ PDF successfully created: ${outputFile}`);
+    } catch (error) {
+        console.error("❌ Error converting Base64 to PDF:", error.message);
+    }
+}
+
+// // Example Usage
+base64ToPDF("pdfBase64.txt", "output.pdf");
