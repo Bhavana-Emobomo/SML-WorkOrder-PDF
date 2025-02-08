@@ -184,9 +184,9 @@ exports.handler = async (event) => {
     const tableXPositions = [25, 60, 280, 430, 480];
     const maxWidthForColumns = [30, 80, 140, 180, 100];
     
-    const rowHeight = 25;
+    const rowHeight = 20;
     const cellPadding = 0;
-    let lineHeight = 12;  // Line height ko readable banane ke liye
+    let lineHeight = 0;  // Line height ko readable banane ke liye
     
     // Draw table headers with padding and borders
     tableHeaders.forEach((header, index) => {
