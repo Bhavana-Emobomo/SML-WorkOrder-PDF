@@ -30,12 +30,12 @@ jobs:
         run: |
           aws lambda update-function-configuration \
             --function-name Testing-PDF \
-            --handler indexx.handler
+            --handler index.handler
 
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
-            --function-name test-cicd \
+            --function-name Testing-PDF \
             --zip-file fileb://function.zip
 
      
