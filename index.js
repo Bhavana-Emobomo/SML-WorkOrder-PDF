@@ -173,22 +173,22 @@ exports.handler = async (event) => {
 
     // Table headers
 
-    const rowHeight = 0; // Set row height to 0 (no space between rows)
-const cellPadding = 0; // Remove padding between cells
-let lineHeight = 0; // Remove line height, no extra space for text lines
+    const rowHeight = 0; // No space between rows
+const cellPadding = 0; // No padding
+let lineHeight = 0; // No line height
 
-// Draw table headers with padding and borders
+// Draw table headers with no extra space
 tableHeaders.forEach((header, index) => {
   currentPage.drawText(header, {
     x: tableXPositions[index], // No padding here
-    y: itemY,
+    y: itemY, // Directly at current Y position
     size: 9,
     font: timesRomanFontBold,
     color: blackColor,
   });
 });
 
-// Draw top border line
+// Draw top border line at header position
 currentPage.drawLine({
   start: { x: tableXPositions[0], y: itemY },
   end: {
@@ -199,42 +199,17 @@ currentPage.drawLine({
   color: blackColor,
 });
 
-// Draw bottom border line
-currentPage.drawLine({
-  start: { x: tableXPositions[0], y: itemY - rowHeight },
-  end: {
-    x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY - rowHeight,
-  },
-  thickness: 1,
-  color: blackColor,
-});
-
-// Draw vertical lines for table headers
+// Draw vertical lines for table headers without extra space
 tableXPositions.forEach((xPos) => {
   currentPage.drawLine({
     start: { x: xPos, y: itemY },
-    end: { x: xPos, y: itemY - rowHeight },
+    end: { x: xPos, y: itemY },
     thickness: 1,
     color: blackColor,
   });
 });
 
-// Right vertical line
-currentPage.drawLine({
-  start: {
-    x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY,
-  },
-  end: {
-    x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY - rowHeight,
-  },
-  thickness: 1,
-  color: blackColor,
-});
-
-// Move to next row
+// Move to next row after the header
 itemY -= rowHeight;
 
 listItems.forEach((item) => {
@@ -253,7 +228,9 @@ listItems.forEach((item) => {
     itemY = 740;
   }
 
-  const rowTextY = itemY;
+  const rowTextY = itemY; // Start Y position for the current row
+
+  // Split text into lines if necessary
   const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
   const descriptionLines = splitText(item.Description, 220, 9, timesRomanFont);
   const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
@@ -265,13 +242,13 @@ listItems.forEach((item) => {
     1
   );
 
-  // Set dynamic row height to 0, so rows collapse
-  const dynamicRowHeight = rowHeight;
+  // Ensure no space between lines
+  const dynamicRowHeight = rowHeight; 
 
-  // Draw row content with no extra space
+  // Draw row content directly at the current Y position
   currentPage.drawText(item.SNO, {
     x: tableXPositions[0], // No padding here
-    y: rowTextY,
+    y: rowTextY, // Directly on the current Y position
     size: 9,
     font: timesRomanFont,
     color: blackColor,
@@ -280,7 +257,7 @@ listItems.forEach((item) => {
   ItemCodeLines.forEach((line, index) => {
     currentPage.drawText(line, {
       x: tableXPositions[2], // No padding here
-      y: rowTextY - index * lineHeight,
+      y: rowTextY, // Draw each line directly under each other without space
       size: 9,
       font: timesRomanFont,
       color: blackColor,
@@ -290,7 +267,7 @@ listItems.forEach((item) => {
   WorkOrderLines.forEach((line, index) => {
     currentPage.drawText(line, {
       x: tableXPositions[4], // No padding here
-      y: rowTextY - index * lineHeight,
+      y: rowTextY, // Draw each line directly under each other without space
       size: 9,
       font: timesRomanFont,
       color: blackColor,
@@ -300,7 +277,7 @@ listItems.forEach((item) => {
   descriptionLines.forEach((line, index) => {
     currentPage.drawText(line, {
       x: tableXPositions[1], // No padding here
-      y: rowTextY - index * lineHeight,
+      y: rowTextY, // Draw each line directly under each other without space
       size: 9,
       font: timesRomanFont,
       color: blackColor,
@@ -309,13 +286,13 @@ listItems.forEach((item) => {
 
   currentPage.drawText(item.Quantity, {
     x: tableXPositions[3], // No padding here
-    y: rowTextY,
+    y: rowTextY, // Draw directly on the current Y position
     size: 9,
     font: timesRomanFont,
     color: blackColor,
   });
 
-  // Draw horizontal line below row
+  // Draw a horizontal line below the row (no spacing)
   currentPage.drawLine({
     start: { x: tableXPositions[0], y: rowTextY },
     end: {
@@ -326,10 +303,10 @@ listItems.forEach((item) => {
     color: blackColor,
   });
 
-  // Draw vertical lines
+  // Draw vertical lines for row borders
   tableXPositions.forEach((xPos) => {
     currentPage.drawLine({
-      start: { x: xPos, y: rowTextY + dynamicRowHeight },
+      start: { x: xPos, y: rowTextY },
       end: { x: xPos, y: rowTextY },
       thickness: 1,
       color: blackColor,
@@ -339,7 +316,7 @@ listItems.forEach((item) => {
   currentPage.drawLine({
     start: {
       x: tableXPositions[tableXPositions.length - 1] + 100,
-      y: rowTextY + dynamicRowHeight,
+      y: rowTextY,
     },
     end: {
       x: tableXPositions[tableXPositions.length - 1] + 100,
@@ -349,11 +326,11 @@ listItems.forEach((item) => {
     color: blackColor,
   });
 
-  // Move to next row
-  itemY -= dynamicRowHeight;
+  // Move to the next row
+  itemY -= dynamicRowHeight; // No vertical space
 });
 
-itemY -= 15; // Reduced spacing at the end
+itemY -= 15; // Reduced spacing at the end of the table (if needed)
 
     
 
