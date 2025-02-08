@@ -173,10 +173,9 @@ exports.handler = async (event) => {
 
     // Table headers
 
-    const rowHeight = 0;
-const cellPadding = 0;
-let lineHeight = 0;
+    const cellPadding = 0;  // No padding
 
+// Draw table headers
 tableHeaders.forEach((header, index) => {
   currentPage.drawText(header, {
     x: tableXPositions[index],
@@ -187,6 +186,7 @@ tableHeaders.forEach((header, index) => {
   });
 });
 
+// Draw top border line
 currentPage.drawLine({
   start: { x: tableXPositions[0], y: itemY },
   end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
@@ -194,92 +194,76 @@ currentPage.drawLine({
   color: blackColor,
 });
 
-itemY -= rowHeight;
+// Move to next row (exact text position)
+itemY -= 9;  // Move down exactly by font size
 
 listItems.forEach((item) => {
   if (itemY < footerSpace) {
     currentPage = pdfDoc.addPage();
-    currentPageNumber++;
     itemY = 740;
   }
 
-  const rowTextY = itemY;
-  const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
-  const descriptionLines = splitText(item.Description, 220, 9, timesRomanFont);
-  const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
-
-  const maxLinesInRow = Math.max(
-    ItemCodeLines.length,
-    WorkOrderLines.length,
-    descriptionLines.length,
-    1
-  );
-
-  const dynamicRowHeight = rowHeight * maxLinesInRow;
-
+  // Draw row content (no spacing)
   currentPage.drawText(item.SNO, {
     x: tableXPositions[0],
-    y: rowTextY,
+    y: itemY,
     size: 9,
     font: timesRomanFont,
     color: blackColor,
-  });
-
-  ItemCodeLines.forEach((line, index) => {
-    currentPage.drawText(line, {
-      x: tableXPositions[2],
-      y: rowTextY - (index * lineHeight),
-      size: 9,
-      font: timesRomanFont,
-      color: blackColor,
-    });
-  });
-
-  WorkOrderLines.forEach((line, index) => {
-    currentPage.drawText(line, {
-      x: tableXPositions[4],
-      y: rowTextY - (index * lineHeight),
-      size: 9,
-      font: timesRomanFont,
-      color: blackColor,
-    });
-  });
-
-  descriptionLines.forEach((line, index) => {
-    currentPage.drawText(line, {
-      x: tableXPositions[1],
-      y: rowTextY - (index * lineHeight),
-      size: 9,
-      font: timesRomanFont,
-      color: blackColor,
-    });
   });
 
   currentPage.drawText(item.Quantity, {
     x: tableXPositions[3],
-    y: rowTextY,
+    y: itemY,
     size: 9,
     font: timesRomanFont,
     color: blackColor,
   });
 
+  currentPage.drawText(item.ItemCode, {
+    x: tableXPositions[2],
+    y: itemY,
+    size: 9,
+    font: timesRomanFont,
+    color: blackColor,
+  });
+
+  currentPage.drawText(item.WorkOrderId, {
+    x: tableXPositions[4],
+    y: itemY,
+    size: 9,
+    font: timesRomanFont,
+    color: blackColor,
+  });
+
+  currentPage.drawText(item.Description, {
+    x: tableXPositions[1],
+    y: itemY,
+    size: 9,
+    font: timesRomanFont,
+    color: blackColor,
+  });
+
+  // Draw row border directly under text
   currentPage.drawLine({
-    start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight },
-    end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
+    start: { x: tableXPositions[0], y: itemY - 1 },  // Just below text
+    end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 1 },
     thickness: 1,
     color: blackColor,
   });
 
+  // Draw vertical lines for the row
   tableXPositions.forEach((xPos) => {
     currentPage.drawLine({
-      start: { x: xPos, y: rowTextY },
-      end: { x: xPos, y: rowTextY - dynamicRowHeight },
+      start: { x: xPos, y: itemY },
+      end: { x: xPos, y: itemY - 9 },  // Same as text height
       thickness: 1,
       color: blackColor,
     });
   });
 
-  itemY -= dynamicRowHeight;
+  // Move directly to next row (no spacing)
+  itemY -= 9;
 });
 
     
