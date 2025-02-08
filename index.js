@@ -168,7 +168,7 @@ exports.handler = async (event) => {
         font: timesRomanFont,
         color: blackColor,
       });
-      yPosition -= 8; // Adjust line spacing as needed
+      yPosition -= 2; // Adjust line spacing as needed
     }
 
     // Table headers
@@ -195,7 +195,7 @@ exports.handler = async (event) => {
     });
     
     // Move to next row (directly below text)
-    itemY -= 9;
+    itemY -= 2;
     
     listItems.forEach((item) => {
       if (itemY < footerSpace) {
@@ -256,14 +256,14 @@ exports.handler = async (event) => {
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
           start: { x: xPos, y: itemY },
-          end: { x: xPos, y: itemY - 9 },  // Exact text height
+          end: { x: xPos, y: itemY - 2 },  // Exact text height
           thickness: 0.5,
           color: blackColor,
         });
       });
     
       // Move directly to next row (no extra space)
-      itemY -= 9;
+      itemY -= 2;
     });
     
 
@@ -323,7 +323,7 @@ exports.handler = async (event) => {
         font: timesRomanFont,
         color: blackColor,
       });
-      itemY -= 8;
+      itemY -= 1000;
     }
 
 
