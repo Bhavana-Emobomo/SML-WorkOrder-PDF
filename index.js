@@ -173,11 +173,10 @@ exports.handler = async (event) => {
 
     // Table headers
 
-    const rowHeight = 9;  // Adjusted row height to font size
-const cellPadding = 0; // No padding
-let lineHeight = 9;  // Adjusted line height to avoid spacing issues
+    const rowHeight = 0;
+const cellPadding = 0;
+let lineHeight = 0;
 
-// Draw table headers
 tableHeaders.forEach((header, index) => {
   currentPage.drawText(header, {
     x: tableXPositions[index],
@@ -188,7 +187,6 @@ tableHeaders.forEach((header, index) => {
   });
 });
 
-// Draw top border line
 currentPage.drawLine({
   start: { x: tableXPositions[0], y: itemY },
   end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
@@ -196,33 +194,20 @@ currentPage.drawLine({
   color: blackColor,
 });
 
-// Move to next row
 itemY -= rowHeight;
 
 listItems.forEach((item) => {
-  // Page continuation handling
   if (itemY < footerSpace) {
-    currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
-      x: 400,
-      y: itemY,
-      size: 9,
-      font: timesRomanFontBold,
-      color: blackColor,
-    });
-    itemY -= 15;
     currentPage = pdfDoc.addPage();
     currentPageNumber++;
     itemY = 740;
   }
 
   const rowTextY = itemY;
-
-  // Split text into lines
   const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
   const descriptionLines = splitText(item.Description, 220, 9, timesRomanFont);
   const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
 
-  // Max lines in row
   const maxLinesInRow = Math.max(
     ItemCodeLines.length,
     WorkOrderLines.length,
@@ -230,10 +215,8 @@ listItems.forEach((item) => {
     1
   );
 
-  // Adjusted row height to prevent extra space
   const dynamicRowHeight = rowHeight * maxLinesInRow;
 
-  // Draw row content
   currentPage.drawText(item.SNO, {
     x: tableXPositions[0],
     y: rowTextY,
@@ -280,7 +263,6 @@ listItems.forEach((item) => {
     color: blackColor,
   });
 
-  // Draw horizontal line below row
   currentPage.drawLine({
     start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight },
     end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
@@ -288,7 +270,6 @@ listItems.forEach((item) => {
     color: blackColor,
   });
 
-  // Draw vertical lines
   tableXPositions.forEach((xPos) => {
     currentPage.drawLine({
       start: { x: xPos, y: rowTextY },
@@ -298,11 +279,8 @@ listItems.forEach((item) => {
     });
   });
 
-  // Move to next row with correct height
   itemY -= dynamicRowHeight;
 });
-
-itemY -= 15;  // Final adjustment
 
     
 
