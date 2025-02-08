@@ -182,11 +182,13 @@ exports.handler = async (event) => {
     ];
     
     const tableXPositions = [25, 60, 280, 430, 480];
-    const rowHeight = 25;
-    const cellPadding = 2;
-    let lineHeight = 12;  // Line height ko readable banane ke liye
+    const maxWidthForColumns = [30, 80, 140, 180, 100];
     
-    // Draw table headers
+    const rowHeight = 10;
+    const cellPadding = 0;
+    let lineHeight = 0;  // Line height ko readable banane ke liye
+    
+    // Draw table headers with padding and borders
     tableHeaders.forEach((header, index) => {
       currentPage.drawText(header, {
         x: tableXPositions[index] + cellPadding,
@@ -197,21 +199,29 @@ exports.handler = async (event) => {
       });
     });
     
-    // Draw header border lines
+    // Draw top border line
     currentPage.drawLine({
       start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
-      end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
-      thickness: 1,
-      color: blackColor,
-    });
-    currentPage.drawLine({
-      start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-      end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+      end: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY + rowHeight / 2,
+      },
       thickness: 1,
       color: blackColor,
     });
     
-    // Draw vertical lines for headers
+    // Draw bottom border line
+    currentPage.drawLine({
+      start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
+      end: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY - rowHeight / 2,
+      },
+      thickness: 1,
+      color: blackColor,
+    });
+    
+    // Draw vertical lines for table headers
     tableXPositions.forEach((xPos) => {
       currentPage.drawLine({
         start: { x: xPos, y: itemY + rowHeight / 2 },
@@ -219,6 +229,20 @@ exports.handler = async (event) => {
         thickness: 1,
         color: blackColor,
       });
+    });
+    
+    // Right vertical line
+    currentPage.drawLine({
+      start: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY + rowHeight / 2,
+      },
+      end: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY - rowHeight / 2,
+      },
+      thickness: 1,
+      color: blackColor,
     });
     
     // Move to next row
@@ -241,20 +265,21 @@ exports.handler = async (event) => {
       }
     
       const rowTextY = itemY;
-      const ItemCodeLines = splitText(item.ItemCode, 140, 9, timesRomanFont);
-      const descriptionLines = splitText(item.Description, 200, 9, timesRomanFont);
+      const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
+      const descriptionLines = splitText(item.Description, 220, 9, timesRomanFont);
       const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
     
       const maxLinesInRow = Math.max(
         ItemCodeLines.length,
         WorkOrderLines.length,
-        descriptionLines.length
+        descriptionLines.length,
+        1
       );
     
-      // **Fix: Single-line content ke liye extra space remove**
-      const dynamicRowHeight = maxLinesInRow > 1 ? (maxLinesInRow * lineHeight + 6) : rowHeight;
+      // White space remove karne ke liye yeh condition
+      const dynamicRowHeight = maxLinesInRow > 1 ? (maxLinesInRow * lineHeight + 10) : rowHeight;
     
-      // Draw text inside row
+      // Draw row content
       currentPage.drawText(item.SNO, {
         x: tableXPositions[0] + cellPadding,
         y: rowTextY,
@@ -303,17 +328,20 @@ exports.handler = async (event) => {
     
       // Draw horizontal line below row
       currentPage.drawLine({
-        start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
+        start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
+        end: {
+          x: tableXPositions[tableXPositions.length - 1] + 100,
+          y: rowTextY - dynamicRowHeight / 2,
+        },
         thickness: 1,
         color: blackColor,
       });
     
-      // **Fix: Vertical lines ko exactly row ke size ke hisaab se draw karein**
+      // Draw vertical lines
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
-          start: { x: xPos, y: rowTextY },
-          end: { x: xPos, y: rowTextY - dynamicRowHeight },
+          start: { x: xPos, y: rowTextY + dynamicRowHeight - 12 },
+          end: { x: xPos, y: rowTextY - dynamicRowHeight + 12 },
           thickness: 1,
           color: blackColor,
         });
@@ -322,11 +350,11 @@ exports.handler = async (event) => {
       currentPage.drawLine({
         start: {
           x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: rowTextY,
+          y: rowTextY + dynamicRowHeight - 12,
         },
         end: {
           x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: rowTextY - dynamicRowHeight,
+          y: rowTextY - dynamicRowHeight + 12,
         },
         thickness: 1,
         color: blackColor,
@@ -337,7 +365,6 @@ exports.handler = async (event) => {
     });
     
     itemY -= 20;
-    
     
 
     // Signature section
