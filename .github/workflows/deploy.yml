@@ -1,0 +1,41 @@
+name: Deploy AWS Lambda
+
+on:
+  push:
+    branches:
+      - main  # Change to your desired branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Zip the Lambda Function
+        run: zip -r function.zip . -x "*.git*" 
+
+      - name: Update Lambda Handler
+        run: |
+          aws lambda update-function-configuration \
+            --function-name Testing-PDF \
+            --handler handler.handler
+
+      - name: Deploy to AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name test-cicd \
+            --zip-file fileb://function.zip
+
+     
