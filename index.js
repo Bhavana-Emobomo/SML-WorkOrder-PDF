@@ -185,7 +185,7 @@ exports.handler = async (event) => {
 
     const rowHeight = 25;
     const cellPadding = 2;
-    let lineHeight = 10;
+    let lineHeight = 6;
 
     // Draw table headers with padding and borders
     tableHeaders.forEach((header, index) => {
