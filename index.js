@@ -168,104 +168,12 @@ exports.handler = async (event) => {
         font: timesRomanFont,
         color: blackColor,
       });
-      yPosition -= 2; // Adjust line spacing as needed
+      yPosition -= 8; // Adjust line spacing as needed
     }
 
     // Table headers
 
-    const cellPadding = 0;  // No padding
-
-    // Draw table headers
-    tableHeaders.forEach((header, index) => {
-      currentPage.drawText(header, {
-        x: tableXPositions[index],
-        y: itemY,
-        size: 9,
-        font: timesRomanFontBold,
-        color: blackColor,
-      });
-    });
-    
-    // Draw top border line (reduced thickness)
-    currentPage.drawLine({
-      start: { x: tableXPositions[0], y: itemY - 0.5 },  
-      end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 0.5 },
-      thickness: 0.5,  
-      color: blackColor,
-    });
-    
-    // Move to next row (directly below text)
-    itemY -= 2;
-    
-    listItems.forEach((item) => {
-      if (itemY < footerSpace) {
-        currentPage = pdfDoc.addPage();
-        itemY = 740;
-      }
-    
-      // Draw row content without spacing
-      currentPage.drawText(item.SNO, {
-        x: tableXPositions[0],
-        y: itemY,
-        size: 9,
-        font: timesRomanFont,
-        color: blackColor,
-      });
-    
-      currentPage.drawText(item.Quantity, {
-        x: tableXPositions[3],
-        y: itemY,
-        size: 9,
-        font: timesRomanFont,
-        color: blackColor,
-      });
-    
-      currentPage.drawText(item.ItemCode, {
-        x: tableXPositions[2],
-        y: itemY,
-        size: 9,
-        font: timesRomanFont,
-        color: blackColor,
-      });
-    
-      currentPage.drawText(item.WorkOrderId, {
-        x: tableXPositions[4],
-        y: itemY,
-        size: 9,
-        font: timesRomanFont,
-        color: blackColor,
-      });
-    
-      currentPage.drawText(item.Description, {
-        x: tableXPositions[1],
-        y: itemY,
-        size: 9,
-        font: timesRomanFont,
-        color: blackColor,
-      });
-    
-      // Draw row border directly under text (thickness reduced)
-      currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY - 2000 },  
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 0.5 },
-        thickness: 0.5,
-        color: blackColor,
-      });
-    
-      // Draw vertical lines for the row (align perfectly)
-      tableXPositions.forEach((xPos) => {
-        currentPage.drawLine({
-          start: { x: xPos, y: itemY },
-          end: { x: xPos, y: itemY - 2 },  // Exact text height
-          thickness: 0.5,
-          color: blackColor,
-        });
-      });
-    
-      // Move directly to next row (no extra space)
-      itemY -= 2000;
-    });
-    
+   
 
     // Signature section
     if (itemY - 60 < footerSpace) {
@@ -307,7 +215,7 @@ exports.handler = async (event) => {
     if (isComments) {
       currentPage.drawText("Note:", {
         x: 50,
-        y: itemY + 100,
+        y: itemY + 10,
         size: 14,
         font: timesRomanFontBold,
         color: blackColor,
@@ -318,12 +226,12 @@ exports.handler = async (event) => {
     for (const line of textLinesComments) {
       currentPage.drawText(line, {
         x: 85,
-        y: itemY + 100,
+        y: itemY + 10,
         size: 12,
         font: timesRomanFont,
         color: blackColor,
       });
-      itemY -= 1000;
+      itemY -= 8;
     }
 
 
