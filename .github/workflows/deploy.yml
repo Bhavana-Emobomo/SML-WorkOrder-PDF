@@ -30,7 +30,7 @@ jobs:
         run: |
           aws lambda update-function-configuration \
             --function-name Testing-PDF \
-            --handler handler.handler
+            --handler indexx.handler
 
       - name: Deploy to AWS Lambda
         run: |
