@@ -606,8 +606,8 @@ exports.handler = async (event) => {
     const tableXPositions = [25, 60, 220, 340, 390, 480];
     const maxWidthForColumns = [30, 50, 60, 140, 180, 100]; 
 
-    const rowHeight = 20;
-    const cellPadding = 5;
+    const rowHeight = 10;
+    const cellPadding = 2;
     let lineHeight = 10;
 
     // Draw table headers with padding and borders
