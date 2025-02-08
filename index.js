@@ -175,97 +175,96 @@ exports.handler = async (event) => {
 
     const cellPadding = 0;  // No padding
 
-// Draw table headers
-tableHeaders.forEach((header, index) => {
-  currentPage.drawText(header, {
-    x: tableXPositions[index],
-    y: itemY,
-    size: 9,
-    font: timesRomanFontBold,
-    color: blackColor,
-  });
-});
-
-// Draw top border line
-currentPage.drawLine({
-  start: { x: tableXPositions[0], y: itemY },
-  end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
-  thickness: 1,
-  color: blackColor,
-});
-
-// Move to next row (exact text position)
-itemY -= 9;  // Move down exactly by font size
-
-listItems.forEach((item) => {
-  if (itemY < footerSpace) {
-    currentPage = pdfDoc.addPage();
-    itemY = 740;
-  }
-
-  // Draw row content (no spacing)
-  currentPage.drawText(item.SNO, {
-    x: tableXPositions[0],
-    y: itemY,
-    size: 9,
-    font: timesRomanFont,
-    color: blackColor,
-  });
-
-  currentPage.drawText(item.Quantity, {
-    x: tableXPositions[3],
-    y: itemY,
-    size: 9,
-    font: timesRomanFont,
-    color: blackColor,
-  });
-
-  currentPage.drawText(item.ItemCode, {
-    x: tableXPositions[2],
-    y: itemY,
-    size: 9,
-    font: timesRomanFont,
-    color: blackColor,
-  });
-
-  currentPage.drawText(item.WorkOrderId, {
-    x: tableXPositions[4],
-    y: itemY,
-    size: 9,
-    font: timesRomanFont,
-    color: blackColor,
-  });
-
-  currentPage.drawText(item.Description, {
-    x: tableXPositions[1],
-    y: itemY,
-    size: 9,
-    font: timesRomanFont,
-    color: blackColor,
-  });
-
-  // Draw row border directly under text
-  currentPage.drawLine({
-    start: { x: tableXPositions[0], y: itemY - 1 },  // Just below text
-    end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 1 },
-    thickness: 1,
-    color: blackColor,
-  });
-
-  // Draw vertical lines for the row
-  tableXPositions.forEach((xPos) => {
+    // Draw table headers
+    tableHeaders.forEach((header, index) => {
+      currentPage.drawText(header, {
+        x: tableXPositions[index],
+        y: itemY,
+        size: 9,
+        font: timesRomanFontBold,
+        color: blackColor,
+      });
+    });
+    
+    // Draw top border line (reduced thickness)
     currentPage.drawLine({
-      start: { x: xPos, y: itemY },
-      end: { x: xPos, y: itemY - 9 },  // Same as text height
-      thickness: 1,
+      start: { x: tableXPositions[0], y: itemY - 0.5 },  
+      end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 0.5 },
+      thickness: 0.5,  
       color: blackColor,
     });
-  });
-
-  // Move directly to next row (no spacing)
-  itemY -= 9;
-});
-
+    
+    // Move to next row (directly below text)
+    itemY -= 9;
+    
+    listItems.forEach((item) => {
+      if (itemY < footerSpace) {
+        currentPage = pdfDoc.addPage();
+        itemY = 740;
+      }
+    
+      // Draw row content without spacing
+      currentPage.drawText(item.SNO, {
+        x: tableXPositions[0],
+        y: itemY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+    
+      currentPage.drawText(item.Quantity, {
+        x: tableXPositions[3],
+        y: itemY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+    
+      currentPage.drawText(item.ItemCode, {
+        x: tableXPositions[2],
+        y: itemY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+    
+      currentPage.drawText(item.WorkOrderId, {
+        x: tableXPositions[4],
+        y: itemY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+    
+      currentPage.drawText(item.Description, {
+        x: tableXPositions[1],
+        y: itemY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+    
+      // Draw row border directly under text (thickness reduced)
+      currentPage.drawLine({
+        start: { x: tableXPositions[0], y: itemY - 0.5 },  
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 0.5 },
+        thickness: 0.5,
+        color: blackColor,
+      });
+    
+      // Draw vertical lines for the row (align perfectly)
+      tableXPositions.forEach((xPos) => {
+        currentPage.drawLine({
+          start: { x: xPos, y: itemY },
+          end: { x: xPos, y: itemY - 9 },  // Exact text height
+          thickness: 0.5,
+          color: blackColor,
+        });
+      });
+    
+      // Move directly to next row (no extra space)
+      itemY -= 9;
+    });
     
 
     // Signature section
