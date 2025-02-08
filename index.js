@@ -173,14 +173,14 @@ exports.handler = async (event) => {
 
     // Table headers
 
-    const rowHeight = 3; // Reduced row height
-const cellPadding = 0;
-let lineHeight = 8;  // Adjusted line height for better text fit
+    const rowHeight = 0; // Set row height to 0 (no space between rows)
+const cellPadding = 0; // Remove padding between cells
+let lineHeight = 0; // Remove line height, no extra space for text lines
 
 // Draw table headers with padding and borders
 tableHeaders.forEach((header, index) => {
   currentPage.drawText(header, {
-    x: tableXPositions[index] + cellPadding,
+    x: tableXPositions[index], // No padding here
     y: itemY,
     size: 9,
     font: timesRomanFontBold,
@@ -190,10 +190,10 @@ tableHeaders.forEach((header, index) => {
 
 // Draw top border line
 currentPage.drawLine({
-  start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
+  start: { x: tableXPositions[0], y: itemY },
   end: {
     x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY + rowHeight / 2,
+    y: itemY,
   },
   thickness: 1,
   color: blackColor,
@@ -201,10 +201,10 @@ currentPage.drawLine({
 
 // Draw bottom border line
 currentPage.drawLine({
-  start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
+  start: { x: tableXPositions[0], y: itemY - rowHeight },
   end: {
     x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY - rowHeight / 2,
+    y: itemY - rowHeight,
   },
   thickness: 1,
   color: blackColor,
@@ -213,8 +213,8 @@ currentPage.drawLine({
 // Draw vertical lines for table headers
 tableXPositions.forEach((xPos) => {
   currentPage.drawLine({
-    start: { x: xPos, y: itemY + rowHeight / 2 },
-    end: { x: xPos, y: itemY - rowHeight / 2 },
+    start: { x: xPos, y: itemY },
+    end: { x: xPos, y: itemY - rowHeight },
     thickness: 1,
     color: blackColor,
   });
@@ -224,11 +224,11 @@ tableXPositions.forEach((xPos) => {
 currentPage.drawLine({
   start: {
     x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY + rowHeight / 2,
+    y: itemY,
   },
   end: {
     x: tableXPositions[tableXPositions.length - 1] + 100,
-    y: itemY - rowHeight / 2,
+    y: itemY - rowHeight,
   },
   thickness: 1,
   color: blackColor,
@@ -265,12 +265,12 @@ listItems.forEach((item) => {
     1
   );
 
-  // Reduce extra spacing for a more compact table
-  const dynamicRowHeight = maxLinesInRow > 1 ? (maxLinesInRow * lineHeight + 5) : rowHeight;
+  // Set dynamic row height to 0, so rows collapse
+  const dynamicRowHeight = rowHeight;
 
-  // Draw row content
+  // Draw row content with no extra space
   currentPage.drawText(item.SNO, {
-    x: tableXPositions[0] + cellPadding,
+    x: tableXPositions[0], // No padding here
     y: rowTextY,
     size: 9,
     font: timesRomanFont,
@@ -279,7 +279,7 @@ listItems.forEach((item) => {
 
   ItemCodeLines.forEach((line, index) => {
     currentPage.drawText(line, {
-      x: tableXPositions[2] + cellPadding,
+      x: tableXPositions[2], // No padding here
       y: rowTextY - index * lineHeight,
       size: 9,
       font: timesRomanFont,
@@ -289,7 +289,7 @@ listItems.forEach((item) => {
 
   WorkOrderLines.forEach((line, index) => {
     currentPage.drawText(line, {
-      x: tableXPositions[4] + cellPadding,
+      x: tableXPositions[4], // No padding here
       y: rowTextY - index * lineHeight,
       size: 9,
       font: timesRomanFont,
@@ -299,7 +299,7 @@ listItems.forEach((item) => {
 
   descriptionLines.forEach((line, index) => {
     currentPage.drawText(line, {
-      x: tableXPositions[1] + cellPadding,
+      x: tableXPositions[1], // No padding here
       y: rowTextY - index * lineHeight,
       size: 9,
       font: timesRomanFont,
@@ -308,7 +308,7 @@ listItems.forEach((item) => {
   });
 
   currentPage.drawText(item.Quantity, {
-    x: tableXPositions[3] + cellPadding,
+    x: tableXPositions[3], // No padding here
     y: rowTextY,
     size: 9,
     font: timesRomanFont,
@@ -317,10 +317,10 @@ listItems.forEach((item) => {
 
   // Draw horizontal line below row
   currentPage.drawLine({
-    start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
+    start: { x: tableXPositions[0], y: rowTextY },
     end: {
       x: tableXPositions[tableXPositions.length - 1] + 100,
-      y: rowTextY - dynamicRowHeight / 2,
+      y: rowTextY,
     },
     thickness: 1,
     color: blackColor,
@@ -329,8 +329,8 @@ listItems.forEach((item) => {
   // Draw vertical lines
   tableXPositions.forEach((xPos) => {
     currentPage.drawLine({
-      start: { x: xPos, y: rowTextY + dynamicRowHeight - 10 },
-      end: { x: xPos, y: rowTextY - dynamicRowHeight + 10 },
+      start: { x: xPos, y: rowTextY + dynamicRowHeight },
+      end: { x: xPos, y: rowTextY },
       thickness: 1,
       color: blackColor,
     });
@@ -339,11 +339,11 @@ listItems.forEach((item) => {
   currentPage.drawLine({
     start: {
       x: tableXPositions[tableXPositions.length - 1] + 100,
-      y: rowTextY + dynamicRowHeight - 10,
+      y: rowTextY + dynamicRowHeight,
     },
     end: {
       x: tableXPositions[tableXPositions.length - 1] + 100,
-      y: rowTextY - dynamicRowHeight + 10,
+      y: rowTextY,
     },
     thickness: 1,
     color: blackColor,
