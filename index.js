@@ -246,7 +246,7 @@ exports.handler = async (event) => {
     
       // Draw row border directly under text (thickness reduced)
       currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY - 0.5 },  
+        start: { x: tableXPositions[0], y: itemY - 2000 },  
         end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - 0.5 },
         thickness: 0.5,
         color: blackColor,
@@ -263,7 +263,7 @@ exports.handler = async (event) => {
       });
     
       // Move directly to next row (no extra space)
-      itemY -= 2;
+      itemY -= 2000;
     });
     
 
@@ -307,7 +307,7 @@ exports.handler = async (event) => {
     if (isComments) {
       currentPage.drawText("Note:", {
         x: 50,
-        y: itemY + 10,
+        y: itemY + 100,
         size: 14,
         font: timesRomanFontBold,
         color: blackColor,
@@ -318,7 +318,7 @@ exports.handler = async (event) => {
     for (const line of textLinesComments) {
       currentPage.drawText(line, {
         x: 85,
-        y: itemY + 10,
+        y: itemY + 100,
         size: 12,
         font: timesRomanFont,
         color: blackColor,
