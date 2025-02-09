@@ -604,14 +604,15 @@ exports.handler = async (event) => {
         "Po Number",
         "PO Date"
       ];
+      
       const tableXPositions = [25, 60, 220, 340, 390, 480];
-      const maxWidthForColumns = [30, 50, 60, 140, 180, 100]; 
+      const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
       
       const rowHeight = 25;
       const cellPadding = 5;
       let lineHeight = 10;
       
-      // Draw table headers with padding and borders
+      // Draw table headers
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
           x: tableXPositions[index] + cellPadding,
@@ -622,27 +623,22 @@ exports.handler = async (event) => {
         });
       });
       
-      // Draw horizontal lines for table headers
+      // Draw continuous horizontal lines (Header Borders)
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY + rowHeight / 2,
-        },
-        thickness: 1,
-        color: blackColor,
-      });
-      currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY - rowHeight / 2,
-        },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
-      // Draw vertical lines for table headers
+      currentPage.drawLine({
+        start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        thickness: 1,
+        color: blackColor,
+      });
+      
+      // Draw vertical header lines
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
           start: { x: xPos, y: itemY + rowHeight / 2 },
@@ -652,21 +648,15 @@ exports.handler = async (event) => {
         });
       });
       
-      // Draw right border for the header
+      // Rightmost border
       currentPage.drawLine({
-        start: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY + rowHeight / 2,
-        },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY - rowHeight / 2,
-        },
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
-      // Draw rows with padding and borders
+      // Start drawing rows
       itemY -= rowHeight;
       listItems.forEach((item) => {
         if (itemY < footerSpace) {
@@ -687,7 +677,7 @@ exports.handler = async (event) => {
       
         const rowTextY = itemY;
       
-        // Draw each cell's content
+        // Text content
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
           y: rowTextY,
@@ -700,19 +690,10 @@ exports.handler = async (event) => {
         const PoLines = splitText(item.ProjectNumber, 80, 9, timesRomanFont);
         const descriptionLines = splitText(item.Description, maxWidthForColumns[3], 9, timesRomanFont);
       
-        const maxLinesInRow = Math.max(
-          ItemCodeLines.length, 
-          PoLines.length, 
-          descriptionLines.length, 
-          1  
-        );
+        const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
       
-        // If the row contains more than two lines, add extra spacing; otherwise, keep it compact
-        const dynamicRowHeight = maxLinesInRow > 2 
-          ? maxLinesInRow * lineHeight + 15  
-          : maxLinesInRow * lineHeight + 10;  
+        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : maxLinesInRow * lineHeight + 5;
       
-        // Render each text field
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
             x: tableXPositions[2] + cellPadding,
@@ -725,22 +706,22 @@ exports.handler = async (event) => {
       
         PoLines.forEach((line, index) => {
           currentPage.drawText(line, {
-              x: tableXPositions[4] + cellPadding ,
-              y: rowTextY - index * lineHeight ,
-              size: 9,
-              font: timesRomanFont,
-              color: blackColor,
+            x: tableXPositions[4] + cellPadding,
+            y: rowTextY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
           });
         });
       
         descriptionLines.forEach((line, index) => {
-            currentPage.drawText(line, {
-                x: tableXPositions[1] + cellPadding ,
-                y: rowTextY - index * lineHeight ,
-                size: 9,
-                font: timesRomanFont,
-                color: blackColor,
-            });
+          currentPage.drawText(line, {
+            x: tableXPositions[1] + cellPadding,
+            y: rowTextY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
+          });
         });
       
         currentPage.drawText(item.Quantity, {
@@ -752,6 +733,7 @@ exports.handler = async (event) => {
         });
       
         const formattedPODate = convertToDDMMYYYY(item.PODate);
+      
         currentPage.drawText(formattedPODate, {
           x: tableXPositions[5] + cellPadding,
           y: rowTextY,
@@ -760,37 +742,28 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        // Draw horizontal line below each row
+        // Draw continuous horizontal line for row
         currentPage.drawLine({
-          start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
-          end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight / 2,
-          },
+          start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight },
+          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
           thickness: 1,
           color: blackColor,
         });
       
-        // Draw vertical lines for each row
+        // Draw vertical lines for the row
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
-            start: { x: xPos, y: rowTextY + dynamicRowHeight - 12 },
-            end: { x: xPos, y: rowTextY - dynamicRowHeight + 12 },
+            start: { x: xPos, y: rowTextY },
+            end: { x: xPos, y: rowTextY - dynamicRowHeight },
             thickness: 1,
             color: blackColor,
           });
         });
       
-        // Draw right border for each row
+        // Rightmost vertical line
         currentPage.drawLine({
-          start: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY + dynamicRowHeight -12,
-          },
-          end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight +12 ,
-          },
+          start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY },
+          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
           thickness: 1,
           color: blackColor,
         });
@@ -799,6 +772,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
+      
       
 
       // Signature section
