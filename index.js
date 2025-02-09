@@ -725,7 +725,7 @@ exports.handler = async (event) => {
         const rowBottomY = rowTopY - dynamicRowHeight;
 
         // Adjusted text position by moving it slightly down
-        const textStartY = rowTopY - dynamicRowHeight / 2 + lineHeight / 2 - 4; // Adjusted by -2
+        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 6; // Adjusted by -2
 
         // Draw text for each column (Perfectly centered)
         currentPage.drawText(item.SNO, {
