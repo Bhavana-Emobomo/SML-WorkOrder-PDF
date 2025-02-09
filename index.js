@@ -692,7 +692,7 @@ exports.handler = async (event) => {
       
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
       
-        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : maxLinesInRow * lineHeight + 3;
+        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : maxLinesInRow * lineHeight + 5;
       
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
@@ -772,6 +772,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
+      
       
       
 
