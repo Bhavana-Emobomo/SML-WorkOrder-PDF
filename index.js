@@ -608,18 +608,18 @@ exports.handler = async (event) => {
       const maxWidthForColumns = [30, 150, 60, 50, 100, 80];
 
       const rowHeight = 25;
-      const cellPadding = 5;
-      const minRowHeight = 18;
+      const cellPadding = 6; // Increased padding for better alignment
+      const minRowHeight = 20; // Slightly increased for better spacing
       const lineHeight = 10;
 
       // Move horizontal lines and text 4-5 pixels up
-      const moveUpAmount = 5; // Adjust by 4-5 pixels
+      const moveUpAmount = 4; // Fine-tuned movement
 
       // Draw table headers
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
           x: tableXPositions[index] + cellPadding,
-          y: itemY - cellPadding, // ✅ FIXED: Now aligned properly
+          y: itemY - cellPadding,
           size: 9,
           font: timesRomanFontBold,
           color: blackColor,
@@ -688,7 +688,7 @@ exports.handler = async (event) => {
           itemY = 740;
         }
 
-        const rowTopY = itemY; // Save row top position
+        const rowTopY = itemY;
 
         // Split text for wrapping
         const descriptionLines = splitText(
@@ -720,11 +720,12 @@ exports.handler = async (event) => {
         // Adjust row height dynamically based on content
         const dynamicRowHeight = Math.max(
           minRowHeight,
-          maxLinesInRow * lineHeight + 6
+          maxLinesInRow * lineHeight + 8
         );
-        const rowBottomY = rowTopY - dynamicRowHeight; // ✅ FIXED: Removed moveUpAmount
+        const rowBottomY = rowTopY - dynamicRowHeight;
 
-        const textStartY = rowTopY - cellPadding - 3; // ✅ FIXED: Content now inside the row
+        // Fine-tuned text alignment to be vertically centered
+        const textStartY = rowTopY - dynamicRowHeight / 2 + lineHeight / 2;
 
         // Draw text for each column
         currentPage.drawText(item.SNO, {
