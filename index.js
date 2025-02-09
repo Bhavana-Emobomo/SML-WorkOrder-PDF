@@ -609,7 +609,7 @@ exports.handler = async (event) => {
     
     const rowHeight = 25;
     const cellPadding = 5;
-    const minRowHeight = 18; // Reduced minimum height
+    const minRowHeight = 18;
     let lineHeight = 10;
     
     // Draw table headers
@@ -624,6 +624,7 @@ exports.handler = async (event) => {
     });
     
     // Draw horizontal header lines
+    const headerBottomY = itemY - rowHeight / 2;
     currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
         end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
@@ -631,8 +632,8 @@ exports.handler = async (event) => {
         color: blackColor,
     });
     currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        start: { x: tableXPositions[0], y: headerBottomY },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: headerBottomY },
         thickness: 1,
         color: blackColor,
     });
@@ -641,7 +642,7 @@ exports.handler = async (event) => {
     tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
             start: { x: xPos, y: itemY + rowHeight / 2 },
-            end: { x: xPos, y: itemY - rowHeight / 2 },
+            end: { x: xPos, y: headerBottomY },
             thickness: 1,
             color: blackColor,
         });
@@ -650,13 +651,13 @@ exports.handler = async (event) => {
     // Right border for header
     currentPage.drawLine({
         start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: headerBottomY },
         thickness: 1,
         color: blackColor,
     });
     
     // Draw table rows
-    itemY -= rowHeight;
+    itemY = headerBottomY;
     listItems.forEach((item) => {
         if (itemY < footerSpace) {
             currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
@@ -684,8 +685,11 @@ exports.handler = async (event) => {
     
         // Adjust row height dynamically based on content
         const dynamicRowHeight = maxLinesInRow > 1
-            ? maxLinesInRow * lineHeight + 10  // Add extra space if more than one line
-            : minRowHeight;  // Keep compact if only one line
+            ? maxLinesInRow * lineHeight + 10
+            : minRowHeight;
+    
+        // Calculate row bottom position
+        const rowBottomY = rowTextY - dynamicRowHeight;
     
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -745,8 +749,8 @@ exports.handler = async (event) => {
     
         // Draw horizontal line below the row
         currentPage.drawLine({
-            start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
-            end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight / 2 },
+            start: { x: tableXPositions[0], y: rowBottomY },
+            end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
             thickness: 1,
             color: blackColor,
         });
@@ -754,8 +758,8 @@ exports.handler = async (event) => {
         // Fix vertical lines by ensuring they span the correct height
         tableXPositions.forEach((xPos) => {
             currentPage.drawLine({
-                start: { x: xPos, y: rowTextY + dynamicRowHeight / 2 },
-                end: { x: xPos, y: rowTextY - dynamicRowHeight / 2 },
+                start: { x: xPos, y: rowTextY },
+                end: { x: xPos, y: rowBottomY },
                 thickness: 1,
                 color: blackColor,
             });
@@ -763,17 +767,17 @@ exports.handler = async (event) => {
     
         // Right border for each row
         currentPage.drawLine({
-            start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY + dynamicRowHeight / 2 },
-            end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight / 2 },
+            start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY },
+            end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
             thickness: 1,
             color: blackColor,
         });
     
-        itemY -= dynamicRowHeight;
+        itemY = rowBottomY; // Move to the next row correctly
     });
     
     itemY -= 20;
-    
+        
       
       
       // Signature section
