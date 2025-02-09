@@ -595,7 +595,6 @@ exports.handler = async (event) => {
       }
 
       // Table headers
-
       const tableHeaders = [
         "SNO",
         "Description",
@@ -604,14 +603,16 @@ exports.handler = async (event) => {
         "Po Number",
         "PO Date"
       ];
+      
       const tableXPositions = [25, 60, 220, 340, 390, 480];
-      const maxWidthForColumns = [30, 50, 60, 140, 180, 100]; 
+      const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
       
       const rowHeight = 25;
       const cellPadding = 5;
+      const minRowHeight = 20;
       let lineHeight = 10;
       
-      // Draw table headers with padding and borders
+      // Draw table headers
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
           x: tableXPositions[index] + cellPadding,
@@ -622,7 +623,7 @@ exports.handler = async (event) => {
         });
       });
       
-      // Draw horizontal lines for table headers
+      // Draw horizontal header lines
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
         end: {
@@ -642,7 +643,7 @@ exports.handler = async (event) => {
         color: blackColor,
       });
       
-      // Draw vertical lines for table headers
+      // Draw vertical lines for headers
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
           start: { x: xPos, y: itemY + rowHeight / 2 },
@@ -652,7 +653,7 @@ exports.handler = async (event) => {
         });
       });
       
-      // Draw right border for the header
+      // Right border for header
       currentPage.drawLine({
         start: {
           x: tableXPositions[tableXPositions.length - 1] + 100,
@@ -666,7 +667,7 @@ exports.handler = async (event) => {
         color: blackColor,
       });
       
-      // Draw rows with padding and borders
+      // Draw table rows
       itemY -= rowHeight;
       listItems.forEach((item) => {
         if (itemY < footerSpace) {
@@ -687,7 +688,17 @@ exports.handler = async (event) => {
       
         const rowTextY = itemY;
       
-        // Draw each cell's content
+        // Split text for wrapping
+        const ItemCodeLines = splitText(item.ItemCode, 110, 9, timesRomanFont);
+        const PoLines = splitText(item.ProjectNumber, 80, 9, timesRomanFont);
+        const descriptionLines = splitText(item.Description, maxWidthForColumns[3], 9, timesRomanFont);
+      
+        const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
+      
+        // Ensure enough space for single-line rows
+        const dynamicRowHeight = Math.max(maxLinesInRow * lineHeight, minRowHeight);
+      
+        // Draw text for each column
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
           y: rowTextY,
@@ -696,23 +707,6 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        const ItemCodeLines = splitText(item.ItemCode, 110, 9, timesRomanFont);
-        const PoLines = splitText(item.ProjectNumber, 80, 9, timesRomanFont);
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[3], 9, timesRomanFont);
-      
-        const maxLinesInRow = Math.max(
-          ItemCodeLines.length, 
-          PoLines.length, 
-          descriptionLines.length, 
-          1  
-        );
-      
-        // If the row contains more than two lines, add extra spacing; otherwise, keep it compact
-        const dynamicRowHeight = maxLinesInRow > 2 
-          ? maxLinesInRow * lineHeight + 15  
-          : maxLinesInRow * lineHeight;  
-      
-        // Render each text field
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
             x: tableXPositions[2] + cellPadding,
@@ -725,22 +719,22 @@ exports.handler = async (event) => {
       
         PoLines.forEach((line, index) => {
           currentPage.drawText(line, {
-              x: tableXPositions[4] + cellPadding ,
-              y: rowTextY - index * lineHeight ,
-              size: 9,
-              font: timesRomanFont,
-              color: blackColor,
+            x: tableXPositions[4] + cellPadding,
+            y: rowTextY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
           });
         });
       
         descriptionLines.forEach((line, index) => {
-            currentPage.drawText(line, {
-                x: tableXPositions[1] + cellPadding ,
-                y: rowTextY - index * lineHeight ,
-                size: 9,
-                font: timesRomanFont,
-                color: blackColor,
-            });
+          currentPage.drawText(line, {
+            x: tableXPositions[1] + cellPadding,
+            y: rowTextY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
+          });
         });
       
         currentPage.drawText(item.Quantity, {
@@ -760,7 +754,7 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        // Draw horizontal line below each row
+        // Draw horizontal line below the row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
           end: {
@@ -774,22 +768,22 @@ exports.handler = async (event) => {
         // Draw vertical lines for each row
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
-            start: { x: xPos, y: rowTextY + dynamicRowHeight - 12 },
-            end: { x: xPos, y: rowTextY - dynamicRowHeight + 12 },
+            start: { x: xPos, y: rowTextY + dynamicRowHeight / 2 },
+            end: { x: xPos, y: rowTextY - dynamicRowHeight / 2 },
             thickness: 1,
             color: blackColor,
           });
         });
       
-        // Draw right border for each row
+        // Right border for each row
         currentPage.drawLine({
           start: {
             x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY + dynamicRowHeight -12,
+            y: rowTextY + dynamicRowHeight / 2,
           },
           end: {
             x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight +12 ,
+            y: rowTextY - dynamicRowHeight / 2,
           },
           thickness: 1,
           color: blackColor,
@@ -799,7 +793,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
-           
+         
 
       // Signature section
       if (itemY - 60 < footerSpace) {
