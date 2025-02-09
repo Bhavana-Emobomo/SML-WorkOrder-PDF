@@ -608,7 +608,7 @@ exports.handler = async (event) => {
       const tableXPositions = [25, 60, 220, 340, 390, 480];
       const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
       
-      const rowHeight = 25;
+      const rowHeight = 20; // Reduced height for single-line rows
       const cellPadding = 5;
       let lineHeight = 10;
       
@@ -624,16 +624,18 @@ exports.handler = async (event) => {
       });
       
       // Draw continuous horizontal lines (Header Borders)
+      const tableEndX = tableXPositions[tableXPositions.length - 1] + maxWidthForColumns[maxWidthForColumns.length - 1];
+      
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
+        end: { x: tableEndX, y: itemY + rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        end: { x: tableEndX, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
@@ -650,8 +652,8 @@ exports.handler = async (event) => {
       
       // Rightmost border
       currentPage.drawLine({
-        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        start: { x: tableEndX, y: itemY + rowHeight / 2 },
+        end: { x: tableEndX, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
@@ -672,12 +674,11 @@ exports.handler = async (event) => {
           currentPage = pdfDoc.addPage();
           currentPageNumber++;
           itemY = 740;
-          isNextPageNeeded = false;
         }
       
         const rowTextY = itemY;
       
-        // Text content
+        // Draw text content
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
           y: rowTextY,
@@ -692,7 +693,7 @@ exports.handler = async (event) => {
       
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
       
-        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : maxLinesInRow * lineHeight + 5;
+        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : rowHeight;
       
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
@@ -745,7 +746,7 @@ exports.handler = async (event) => {
         // Draw continuous horizontal line for row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight },
-          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
+          end: { x: tableEndX, y: rowTextY - dynamicRowHeight },
           thickness: 1,
           color: blackColor,
         });
@@ -762,8 +763,8 @@ exports.handler = async (event) => {
       
         // Rightmost vertical line
         currentPage.drawLine({
-          start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY },
-          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
+          start: { x: tableEndX, y: rowTextY },
+          end: { x: tableEndX, y: rowTextY - dynamicRowHeight },
           thickness: 1,
           color: blackColor,
         });
@@ -772,6 +773,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
+      
       
       
       
