@@ -186,9 +186,14 @@ exports.handler = async (event) => {
       const tableXPositions = [25, 60, 280, 430, 480];
       const maxWidthForColumns = [30, 430, 140, 180, 100]; // Adjusted max width for Description column
       
-      const rowHeight = 25;
-      const cellPadding = 5;
-      let lineHeight = 10;
+      const rowHeight = 25;  // Row height set to 25
+      const cellPadding = 2;  // Padding set to 2
+      const minRowHeight = 18; // Minimum row height
+      const lineHeight = 10;  // Line height set to 10
+      
+      // let itemY = 740; // Example starting position for Y coordinate
+      let currentPageNumber = 1;
+      let isNextPageNeeded = false;
       
       // Draw table headers with padding and borders
       tableHeaders.forEach((header, index) => {
@@ -282,7 +287,7 @@ exports.handler = async (event) => {
         );
       
         // Dynamic row height, considering line height and padding
-        const dynamicRowHeight = maxLinesInRow * lineHeight + 15;
+        const dynamicRowHeight = Math.max(maxLinesInRow * lineHeight + 15, minRowHeight); // Ensure the row height doesn't go below minRowHeight
       
         // Draw each cell's content with padding
         currentPage.drawText(item.SNO, {
