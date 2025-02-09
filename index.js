@@ -173,7 +173,210 @@ exports.handler = async (event) => {
 
     // Table headers
 
-   
+    const tableHeaders = [
+      "SNO",
+      "Description",
+      "Item Code",
+      "Quantity",
+      "WorkOrderId",
+    ];
+    const tableXPositions = [25, 60, 280, 430, 480];
+    const maxWidthForColumns = [30, 80, 140, 180, 100]; 
+
+    const rowHeight = 25;
+    const cellPadding = 5;
+    let lineHeight = 10;
+
+    // Draw table headers with padding and borders
+    tableHeaders.forEach((header, index) => {
+      currentPage.drawText(header, {
+        x: tableXPositions[index] + cellPadding,
+        y: itemY,
+        size: 9,
+        font: timesRomanFontBold,
+        color: blackColor,
+      });
+    });
+
+    // Draw horizontal line above header row (top border)
+    currentPage.drawLine({
+      start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
+      end: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY + rowHeight / 2,
+      },
+      thickness: 1,
+      color: blackColor,
+    });
+
+    // Draw horizontal line below header row (bottom border)
+    currentPage.drawLine({
+      start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
+      end: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY - rowHeight / 2,
+      },
+      thickness: 1,
+      color: blackColor,
+    });
+
+    // Draw vertical lines for header columns (excluding right line)
+    tableXPositions.forEach((xPos) => {
+      currentPage.drawLine({
+        start: { x: xPos, y: itemY + rowHeight / 2 },
+        end: { x: xPos, y: itemY - rowHeight / 2 },
+        thickness: 1,
+        color: blackColor,
+      });
+    });
+
+    // Draw right vertical line after the header
+    currentPage.drawLine({
+      start: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY + rowHeight / 2,
+      },
+      end: {
+        x: tableXPositions[tableXPositions.length - 1] + 100,
+        y: itemY - rowHeight / 2,
+      },
+      thickness: 1,
+      color: blackColor,
+    });
+
+    // Draw rows with padding and borders
+    itemY -= rowHeight;
+    listItems.forEach((item) => {
+
+      if (itemY < footerSpace) {
+
+        currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
+          x: 400,  // Adjust X position for centering
+          y: itemY,  // Position it at the top of the new page
+          size: 12,
+          font: timesRomanFontBold,
+          color: blackColor,
+        });
+    
+        itemY -= 20;  // Adjust Y to start content below the message
+        // Add a new page when space is insufficient
+        currentPage = pdfDoc.addPage();
+        currentPageNumber++;  // Increment page number
+        itemY = 740;  // Reset Y position for the new page
+    
+        // Draw the continuation message on the new page
+       
+    
+        // Set isNextPageNeeded to false after message is drawn
+        isNextPageNeeded = false;
+      }
+      
+    
+
+      const rowTextY = itemY;
+      const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
+      const descriptionLines = splitText(item.Description, 220, 9, timesRomanFont);
+      const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
+
+      const maxLinesInRow = Math.max(
+        ItemCodeLines.length, 
+        WorkOrderLines.length, 
+        descriptionLines.length, 
+        1  // Ensure there's at least one line for each field
+      );
+      
+      // Dynamic row height, considering line height and padding
+      const dynamicRowHeight = maxLinesInRow * lineHeight + 15; 
+
+      // Draw each cell's content with padding
+      currentPage.drawText(item.SNO, {
+        x: tableXPositions[0] + cellPadding,
+        y: rowTextY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+
+      ItemCodeLines.forEach((line, index) => {
+        currentPage.drawText(line, {
+          x: tableXPositions[2] + cellPadding,
+          y: rowTextY - index * lineHeight,
+          size: 9,
+          font: timesRomanFont,
+          color: blackColor,
+        });
+      });
+
+      WorkOrderLines.forEach((line, index) => {
+        currentPage.drawText(line, {
+            x: tableXPositions[4] + cellPadding ,
+            y: rowTextY - index * lineHeight ,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
+        });
+      });
+
+      
+      
+  
+      // Draw cell content
+      descriptionLines.forEach((line, index) => {
+          currentPage.drawText(line, {
+              x: tableXPositions[1] + cellPadding ,
+              y: rowTextY - index * lineHeight ,
+              size: 9,
+              font: timesRomanFont,
+              color: blackColor,
+          });
+      });
+
+      currentPage.drawText(item.Quantity, {
+        x: tableXPositions[3] + cellPadding,
+        y: rowTextY,
+        size: 9,
+        font: timesRomanFont,
+        color: blackColor,
+      });
+
+      // Draw horizontal line below each row
+      currentPage.drawLine({
+        start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
+        end: {
+          x: tableXPositions[tableXPositions.length - 1] + 100,
+          y: rowTextY - dynamicRowHeight / 2,
+        },
+        thickness: 1,
+        color: blackColor,
+      });
+
+        // Draw vertical lines for each row cell, including right border
+        tableXPositions.forEach((xPos) => {
+          currentPage.drawLine({
+            start: { x: xPos, y: rowTextY + dynamicRowHeight - 12  },
+            end: { x: xPos, y: rowTextY - dynamicRowHeight + 12 },
+            thickness: 1,
+            color: blackColor,
+          });
+        });
+        currentPage.drawLine({
+          start: {
+            x: tableXPositions[tableXPositions.length - 1] + 100,
+            y: rowTextY + dynamicRowHeight -12,
+          },
+          end: {
+            x: tableXPositions[tableXPositions.length - 1] + 100,
+            y: rowTextY - dynamicRowHeight +12 ,
+          },
+          thickness: 1,
+          color: blackColor,
+        });
+  
+
+      itemY -= dynamicRowHeight ;
+    });
+
+    itemY -= 20;
 
     // Signature section
     if (itemY - 60 < footerSpace) {
@@ -243,7 +446,7 @@ exports.handler = async (event) => {
     //   color: blackColor,
     // });
 
-    currentPage.drawText("For Sri Mahalakshmi Bhavana Engineering Works,", {
+    currentPage.drawText("For Sri Mahalakshmi Engineering Works,", {
       x: 50,
       y: itemY - 20,
       size: 12,
@@ -665,7 +868,7 @@ exports.handler = async (event) => {
       itemY -= 8;
     }
     
-    currentPage.drawText("For Sri Mahalakshmi Bhavana Engineering Works,", {
+    currentPage.drawText("For Sri Mahalakshmi Engineering Works,", {
       x: 50,
       y: itemY - 20,
       size: 12,
@@ -727,34 +930,3 @@ exports.handler = async (event) => {
   }
 
 };
-
-
-// const fs = require("fs");
-// const { PDFDocument } = require("pdf-lib");
-
-async function base64ToPDF(inputFile, outputFile) {
-    try {
-        // Read the Base64 string from the file
-        const base64String = fs.readFileSync(inputFile, "utf-8").trim();
-
-        // Remove metadata if present (like 'data:application/pdf;base64,')
-        const base64Data = base64String.replace(/^data:application\/pdf;base64,/, "");
-
-        // Convert Base64 string to a Uint8Array (binary data)
-        const pdfBytes = Buffer.from(base64Data, "base64");
-
-        // Load PDF document from the decoded bytes
-        const pdfDoc = await PDFDocument.load(pdfBytes);
-
-        // Save the PDF document
-        const savedPdfBytes = await pdfDoc.save();
-        fs.writeFileSync(outputFile, savedPdfBytes);
-
-        console.log(`✅ PDF successfully created: ${outputFile}`);
-    } catch (error) {
-        console.error("❌ Error converting Base64 to PDF:", error.message);
-    }
-}
-
-// // Example Usage
-base64ToPDF("pdfBase64.txt", "output.pdf");
