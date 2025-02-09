@@ -602,199 +602,178 @@ exports.handler = async (event) => {
         "Quantity",
         "Po Number",
         "PO Date"
-      ];
-      
-      const tableXPositions = [25, 60, 220, 340, 390, 480];
-      const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
-      
-      const rowHeight = 25;
-      const cellPadding = 5;
-      const minRowHeight = 20; // Minimum height for single-line rows
-      let lineHeight = 10;
-      
-      // Draw table headers
-      tableHeaders.forEach((header, index) => {
+    ];
+    
+    const tableXPositions = [25, 60, 220, 340, 390, 480];
+    const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
+    
+    const rowHeight = 25;
+    const cellPadding = 5;
+    const minRowHeight = 18; // Reduced minimum height
+    let lineHeight = 10;
+    
+    // Draw table headers
+    tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
-          x: tableXPositions[index] + cellPadding,
-          y: itemY,
-          size: 9,
-          font: timesRomanFontBold,
-          color: blackColor,
-        });
-      });
-      
-      // Draw horizontal header lines
-      currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY + rowHeight / 2,
-        },
-        thickness: 1,
-        color: blackColor,
-      });
-      currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY - rowHeight / 2,
-        },
-        thickness: 1,
-        color: blackColor,
-      });
-      
-      // Draw vertical lines for headers
-      tableXPositions.forEach((xPos) => {
-        currentPage.drawLine({
-          start: { x: xPos, y: itemY + rowHeight / 2 },
-          end: { x: xPos, y: itemY - rowHeight / 2 },
-          thickness: 1,
-          color: blackColor,
-        });
-      });
-      
-      // Right border for header
-      currentPage.drawLine({
-        start: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY + rowHeight / 2,
-        },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY - rowHeight / 2,
-        },
-        thickness: 1,
-        color: blackColor,
-      });
-      
-      // Draw table rows
-      itemY -= rowHeight;
-      listItems.forEach((item) => {
-        if (itemY < footerSpace) {
-          currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
-            x: 400,
+            x: tableXPositions[index] + cellPadding,
             y: itemY,
-            size: 12,
+            size: 9,
             font: timesRomanFontBold,
             color: blackColor,
-          });
-      
-          itemY -= 20;
-          currentPage = pdfDoc.addPage();
-          currentPageNumber++;
-          itemY = 740;
-          isNextPageNeeded = false;
+        });
+    });
+    
+    // Draw horizontal header lines
+    currentPage.drawLine({
+        start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
+        thickness: 1,
+        color: blackColor,
+    });
+    currentPage.drawLine({
+        start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        thickness: 1,
+        color: blackColor,
+    });
+    
+    // Draw vertical lines for headers
+    tableXPositions.forEach((xPos) => {
+        currentPage.drawLine({
+            start: { x: xPos, y: itemY + rowHeight / 2 },
+            end: { x: xPos, y: itemY - rowHeight / 2 },
+            thickness: 1,
+            color: blackColor,
+        });
+    });
+    
+    // Right border for header
+    currentPage.drawLine({
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
+        thickness: 1,
+        color: blackColor,
+    });
+    
+    // Draw table rows
+    itemY -= rowHeight;
+    listItems.forEach((item) => {
+        if (itemY < footerSpace) {
+            currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
+                x: 400,
+                y: itemY,
+                size: 12,
+                font: timesRomanFontBold,
+                color: blackColor,
+            });
+    
+            itemY -= 20;
+            currentPage = pdfDoc.addPage();
+            currentPageNumber++;
+            itemY = 740;
         }
-      
+    
         const rowTextY = itemY;
-      
+    
         // Split text for wrapping
         const ItemCodeLines = splitText(item.ItemCode, 110, 9, timesRomanFont);
         const PoLines = splitText(item.ProjectNumber, 80, 9, timesRomanFont);
         const descriptionLines = splitText(item.Description, maxWidthForColumns[3], 9, timesRomanFont);
-      
+    
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
-      
-        // For rows with more than one line, add extra spacing
+    
+        // Adjust row height dynamically based on content
         const dynamicRowHeight = maxLinesInRow > 1
-          ? maxLinesInRow * lineHeight + 10  // Add extra space if more than one line
-          : minRowHeight;  // Keep compact if only one line
-      
+            ? maxLinesInRow * lineHeight + 10  // Add extra space if more than one line
+            : minRowHeight;  // Keep compact if only one line
+    
         // Draw text for each column
         currentPage.drawText(item.SNO, {
-          x: tableXPositions[0] + cellPadding,
-          y: rowTextY,
-          size: 9,
-          font: timesRomanFont,
-          color: blackColor,
+            x: tableXPositions[0] + cellPadding,
+            y: rowTextY,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
         });
-      
+    
         ItemCodeLines.forEach((line, index) => {
-          currentPage.drawText(line, {
-            x: tableXPositions[2] + cellPadding,
-            y: rowTextY - index * lineHeight,
-            size: 9,
-            font: timesRomanFont,
-            color: blackColor,
-          });
+            currentPage.drawText(line, {
+                x: tableXPositions[2] + cellPadding,
+                y: rowTextY - index * lineHeight,
+                size: 9,
+                font: timesRomanFont,
+                color: blackColor,
+            });
         });
-      
+    
         PoLines.forEach((line, index) => {
-          currentPage.drawText(line, {
-            x: tableXPositions[4] + cellPadding,
-            y: rowTextY - index * lineHeight,
-            size: 9,
-            font: timesRomanFont,
-            color: blackColor,
-          });
+            currentPage.drawText(line, {
+                x: tableXPositions[4] + cellPadding,
+                y: rowTextY - index * lineHeight,
+                size: 9,
+                font: timesRomanFont,
+                color: blackColor,
+            });
         });
-      
+    
         descriptionLines.forEach((line, index) => {
-          currentPage.drawText(line, {
-            x: tableXPositions[1] + cellPadding,
-            y: rowTextY - index * lineHeight,
+            currentPage.drawText(line, {
+                x: tableXPositions[1] + cellPadding,
+                y: rowTextY - index * lineHeight,
+                size: 9,
+                font: timesRomanFont,
+                color: blackColor,
+            });
+        });
+    
+        currentPage.drawText(item.Quantity, {
+            x: tableXPositions[3] + cellPadding,
+            y: rowTextY,
             size: 9,
             font: timesRomanFont,
             color: blackColor,
-          });
         });
-      
-        currentPage.drawText(item.Quantity, {
-          x: tableXPositions[3] + cellPadding,
-          y: rowTextY,
-          size: 9,
-          font: timesRomanFont,
-          color: blackColor,
-        });
-      
+    
         const formattedPODate = convertToDDMMYYYY(item.PODate);
         currentPage.drawText(formattedPODate, {
-          x: tableXPositions[5] + cellPadding,
-          y: rowTextY,
-          size: 9,
-          font: timesRomanFont,
-          color: blackColor,
+            x: tableXPositions[5] + cellPadding,
+            y: rowTextY,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
         });
-      
+    
         // Draw horizontal line below the row
         currentPage.drawLine({
-          start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
-          end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight / 2,
-          },
-          thickness: 1,
-          color: blackColor,
-        });
-      
-        // Fixing the vertical lines by ensuring they span the correct height
-        tableXPositions.forEach((xPos) => {
-          currentPage.drawLine({
-            start: { x: xPos, y: rowTextY + dynamicRowHeight / 2 },
-            end: { x: xPos, y: rowTextY - dynamicRowHeight / 2 },
+            start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
+            end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight / 2 },
             thickness: 1,
             color: blackColor,
-          });
         });
-      
+    
+        // Fix vertical lines by ensuring they span the correct height
+        tableXPositions.forEach((xPos) => {
+            currentPage.drawLine({
+                start: { x: xPos, y: rowTextY + dynamicRowHeight / 2 },
+                end: { x: xPos, y: rowTextY - dynamicRowHeight / 2 },
+                thickness: 1,
+                color: blackColor,
+            });
+        });
+    
         // Right border for each row
         currentPage.drawLine({
-          start: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY + dynamicRowHeight / 2,
-          },
-          end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight / 2,
-          },
-          thickness: 1,
-          color: blackColor,
+            start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY + dynamicRowHeight / 2 },
+            end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight / 2 },
+            thickness: 1,
+            color: blackColor,
         });
-      
+    
         itemY -= dynamicRowHeight;
-      });
-      
-      itemY -= 20;
+    });
+    
+    itemY -= 20;
+    
       
       
       // Signature section
