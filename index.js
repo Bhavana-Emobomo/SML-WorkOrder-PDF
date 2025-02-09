@@ -609,17 +609,16 @@ const maxWidthForColumns = [30, 150, 60, 50, 100, 80];
 
 const rowHeight = 25;
 const cellPadding = 6;
-const minRowHeight = 22;  // Slightly increased for better text alignment
+const minRowHeight = 22;  
 const lineHeight = 10;
 
-// Move horizontal lines and text slightly up
-const moveUpAmount = 3;  // Fine-tuned for best alignment
+const moveUpAmount = 3;  
 
 // Draw table headers
 tableHeaders.forEach((header, index) => {
     currentPage.drawText(header, {
         x: tableXPositions[index] + cellPadding,
-        y: itemY - (rowHeight / 2) + 3, // Centering header text
+        y: itemY - (rowHeight / 2) + 9, // 🔥 EXACT MIDDLE
         size: 9,
         font: timesRomanFontBold,
         color: blackColor,
@@ -649,14 +648,6 @@ tableXPositions.forEach((xPos) => {
         thickness: 1,
         color: blackColor,
     });
-});
-
-// Right border for header
-currentPage.drawLine({
-    start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
-    end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: headerBottomY },
-    thickness: 1,
-    color: blackColor,
 });
 
 // Move to first row
@@ -692,10 +683,10 @@ listItems.forEach((item) => {
     const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 8);
     const rowBottomY = rowTopY - dynamicRowHeight;
 
-    // Calculate text position to keep it vertically centered
+    // 🔥 Center-align text (EXACT CENTER)
     const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2);
 
-    // Draw text for each column (Perfectly centered)
+    // Draw text for each column
     currentPage.drawText(item.SNO, {
         x: tableXPositions[0] + cellPadding,
         y: textStartY,
