@@ -710,7 +710,7 @@ exports.handler = async (event) => {
         // If the row contains more than two lines, add extra spacing; otherwise, keep it compact
         const dynamicRowHeight = maxLinesInRow > 2 
           ? maxLinesInRow * lineHeight + 15  
-          : maxLinesInRow * lineHeight;  
+          : maxLinesInRow * lineHeight + 10;  
       
         // Render each text field
         ItemCodeLines.forEach((line, index) => {
