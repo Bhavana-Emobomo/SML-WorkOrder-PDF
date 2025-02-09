@@ -612,11 +612,14 @@ exports.handler = async (event) => {
     const minRowHeight = 18;
     const lineHeight = 10;
     
+    // Move horizontal lines and text 4-5 pixels up
+    const moveUpAmount = 5;  // Adjust by 4-5 pixels
+    
     // Draw table headers
     tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
             x: tableXPositions[index] + cellPadding,
-            y: itemY - 4,  // Move text down slightly
+            y: itemY - moveUpAmount,  // Move text 5 pixels up
             size: 9,
             font: timesRomanFontBold,
             color: blackColor,
@@ -624,10 +627,10 @@ exports.handler = async (event) => {
     });
     
     // Adjusted header line positions
-    const headerBottomY = itemY - rowHeight + 3; // Move lines up more
+    const headerBottomY = itemY - rowHeight + 3 - moveUpAmount;  // Move lines up 5px
     currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY + 3 }, // Move top line up more
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 },
+        start: { x: tableXPositions[0], y: itemY + 3 - moveUpAmount }, // Move top line 5px up
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 - moveUpAmount },
         thickness: 1,
         color: blackColor,
     });
@@ -641,7 +644,7 @@ exports.handler = async (event) => {
     // Adjusted vertical line positions
     tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
-            start: { x: xPos, y: itemY + 3 }, // Move vertical lines up more
+            start: { x: xPos, y: itemY + 3 - moveUpAmount }, // Move vertical lines up 5px
             end: { x: xPos, y: headerBottomY },
             thickness: 1,
             color: blackColor,
@@ -650,7 +653,7 @@ exports.handler = async (event) => {
     
     // Right border for header
     currentPage.drawLine({
-        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 },
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 - moveUpAmount },
         end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: headerBottomY },
         thickness: 1,
         color: blackColor,
@@ -687,9 +690,8 @@ exports.handler = async (event) => {
     
         // Adjust row height dynamically based on content
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 6);
-        const rowBottomY = rowTopY - dynamicRowHeight + 3; // Move row bottom line up more
+        const rowBottomY = rowTopY - dynamicRowHeight + 3 - moveUpAmount; // Move row bottom 5px up
     
-        // Center text vertically inside the row
         const textStartY = rowTopY - (dynamicRowHeight / 2) + 5;
     
         // Draw text for each column
@@ -748,7 +750,7 @@ exports.handler = async (event) => {
             color: blackColor,
         });
     
-        // Draw horizontal line below the row (moved up more)
+        // Draw horizontal line below the row (moved up 5px)
         currentPage.drawLine({
             start: { x: tableXPositions[0], y: rowBottomY },
             end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
