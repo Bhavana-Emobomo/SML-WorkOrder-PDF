@@ -692,8 +692,8 @@ listItems.forEach((item) => {
     const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 8);
     const rowBottomY = rowTopY - dynamicRowHeight;
 
-    // Calculate text position to keep it vertically centered
-    const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2);
+    // Adjusted text position by moving it slightly down
+    const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 2; // Adjusted by -2
 
     // Draw text for each column (Perfectly centered)
     currentPage.drawText(item.SNO, {
@@ -781,7 +781,7 @@ listItems.forEach((item) => {
 });
 
 itemY -= 20;
-      
+
 
 
       // Signature section
