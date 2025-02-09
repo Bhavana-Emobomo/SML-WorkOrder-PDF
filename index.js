@@ -606,13 +606,11 @@ exports.handler = async (event) => {
       ];
       
       const tableXPositions = [25, 60, 220, 340, 390, 480];
-      const maxWidthForColumns = [30, 140, 80, 50, 100, 90]; // Adjust column widths
+      const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
       
-      const rowHeight = 18; // Reduced height for single-line rows
+      const rowHeight = 25;
       const cellPadding = 5;
-      const lineHeight = 10;
-      
-      const tableEndX = tableXPositions[tableXPositions.length - 1] + maxWidthForColumns[maxWidthForColumns.length - 1];
+      let lineHeight = 10;
       
       // Draw table headers
       tableHeaders.forEach((header, index) => {
@@ -625,22 +623,22 @@ exports.handler = async (event) => {
         });
       });
       
-      // **Draw continuous header lines**
+      // Draw continuous horizontal lines (Header Borders)
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
-        end: { x: tableEndX, y: itemY + rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-        end: { x: tableEndX, y: itemY - rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
-      // **Draw vertical header lines**
+      // Draw vertical header lines
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
           start: { x: xPos, y: itemY + rowHeight / 2 },
@@ -650,15 +648,15 @@ exports.handler = async (event) => {
         });
       });
       
-      // **Draw rightmost vertical border**
+      // Rightmost border
       currentPage.drawLine({
-        start: { x: tableEndX, y: itemY + rowHeight / 2 },
-        end: { x: tableEndX, y: itemY - rowHeight / 2 },
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
-      // **Start drawing rows**
+      // Start drawing rows
       itemY -= rowHeight;
       listItems.forEach((item) => {
         if (itemY < footerSpace) {
@@ -674,11 +672,12 @@ exports.handler = async (event) => {
           currentPage = pdfDoc.addPage();
           currentPageNumber++;
           itemY = 740;
+          isNextPageNeeded = false;
         }
       
         const rowTextY = itemY;
       
-        // **Draw text content**
+        // Text content
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
           y: rowTextY,
@@ -687,12 +686,13 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        const ItemCodeLines = splitText(item.ItemCode, maxWidthForColumns[2], 9, timesRomanFont);
-        const PoLines = splitText(item.ProjectNumber, maxWidthForColumns[4], 9, timesRomanFont);
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[1], 9, timesRomanFont);
+        const ItemCodeLines = splitText(item.ItemCode, 110, 9, timesRomanFont);
+        const PoLines = splitText(item.ProjectNumber, 80, 9, timesRomanFont);
+        const descriptionLines = splitText(item.Description, maxWidthForColumns[3], 9, timesRomanFont);
       
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
-        const dynamicRowHeight = Math.max(rowHeight, maxLinesInRow * lineHeight + 5);
+      
+        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : maxLinesInRow * lineHeight + 5;
       
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
@@ -733,6 +733,7 @@ exports.handler = async (event) => {
         });
       
         const formattedPODate = convertToDDMMYYYY(item.PODate);
+      
         currentPage.drawText(formattedPODate, {
           x: tableXPositions[5] + cellPadding,
           y: rowTextY,
@@ -741,15 +742,15 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        // **Draw continuous horizontal line for row**
+        // Draw continuous horizontal line for row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight },
-          end: { x: tableEndX, y: rowTextY - dynamicRowHeight },
+          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
           thickness: 1,
           color: blackColor,
         });
       
-        // **Draw vertical lines for the row**
+        // Draw vertical lines for the row
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
             start: { x: xPos, y: rowTextY },
@@ -759,10 +760,10 @@ exports.handler = async (event) => {
           });
         });
       
-        // **Rightmost vertical line**
+        // Rightmost vertical line
         currentPage.drawLine({
-          start: { x: tableEndX, y: rowTextY },
-          end: { x: tableEndX, y: rowTextY - dynamicRowHeight },
+          start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY },
+          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight },
           thickness: 1,
           color: blackColor,
         });
@@ -771,9 +772,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
-      
-      
-      
+       
       
       
 
