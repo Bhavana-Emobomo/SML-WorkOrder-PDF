@@ -616,18 +616,18 @@ exports.handler = async (event) => {
     tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
             x: tableXPositions[index] + cellPadding,
-            y: itemY - 5,  // Move text slightly down for alignment
+            y: itemY - 4,  // Move text down slightly
             size: 9,
             font: timesRomanFontBold,
             color: blackColor,
         });
     });
     
-    // Draw horizontal header lines (moved up slightly more)
-    const headerBottomY = itemY - rowHeight + 2; // Move lines up by 1.5px
+    // Adjusted header line positions
+    const headerBottomY = itemY - rowHeight + 3; // Move lines up more
     currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY + 2 }, // Move top line up
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 2 },
+        start: { x: tableXPositions[0], y: itemY + 3 }, // Move top line up more
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 },
         thickness: 1,
         color: blackColor,
     });
@@ -638,10 +638,10 @@ exports.handler = async (event) => {
         color: blackColor,
     });
     
-    // Draw vertical lines for headers
+    // Adjusted vertical line positions
     tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
-            start: { x: xPos, y: itemY + 2 }, // Move vertical lines up slightly more
+            start: { x: xPos, y: itemY + 3 }, // Move vertical lines up more
             end: { x: xPos, y: headerBottomY },
             thickness: 1,
             color: blackColor,
@@ -650,7 +650,7 @@ exports.handler = async (event) => {
     
     // Right border for header
     currentPage.drawLine({
-        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 2 },
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 },
         end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: headerBottomY },
         thickness: 1,
         color: blackColor,
@@ -687,10 +687,10 @@ exports.handler = async (event) => {
     
         // Adjust row height dynamically based on content
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 6);
-        const rowBottomY = rowTopY - dynamicRowHeight + 2; // Move row bottom line up
+        const rowBottomY = rowTopY - dynamicRowHeight + 3; // Move row bottom line up more
     
         // Center text vertically inside the row
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + 4;
+        const textStartY = rowTopY - (dynamicRowHeight / 2) + 5;
     
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -748,7 +748,7 @@ exports.handler = async (event) => {
             color: blackColor,
         });
     
-        // Draw horizontal line below the row (moved up)
+        // Draw horizontal line below the row (moved up more)
         currentPage.drawLine({
             start: { x: tableXPositions[0], y: rowBottomY },
             end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
@@ -778,7 +778,7 @@ exports.handler = async (event) => {
     });
     
     itemY -= 20;
-     
+    
     
       
       // Signature section
