@@ -613,13 +613,13 @@ exports.handler = async (event) => {
     const lineHeight = 10;
     
     // Move horizontal lines and text 4-5 pixels up
-    const moveUpAmount = 5;  // Adjust by 4-5 pixels
+    const moveUpAmount = 5; // Adjust by 4-5 pixels
     
     // Draw table headers
     tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
             x: tableXPositions[index] + cellPadding,
-            y: itemY - moveUpAmount,  // Move text 5 pixels up
+            y: itemY - moveUpAmount,
             size: 9,
             font: timesRomanFontBold,
             color: blackColor,
@@ -627,9 +627,9 @@ exports.handler = async (event) => {
     });
     
     // Adjusted header line positions
-    const headerBottomY = itemY - rowHeight + 3 - moveUpAmount;  // Move lines up 5px
+    const headerBottomY = itemY - rowHeight + 3 - moveUpAmount;
     currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY + 3 - moveUpAmount }, // Move top line 5px up
+        start: { x: tableXPositions[0], y: itemY + 3 - moveUpAmount },
         end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 3 - moveUpAmount },
         thickness: 1,
         color: blackColor,
@@ -644,7 +644,7 @@ exports.handler = async (event) => {
     // Adjusted vertical line positions
     tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
-            start: { x: xPos, y: itemY + 3 - moveUpAmount }, // Move vertical lines up 5px
+            start: { x: xPos, y: itemY + 3 - moveUpAmount },
             end: { x: xPos, y: headerBottomY },
             thickness: 1,
             color: blackColor,
@@ -690,9 +690,9 @@ exports.handler = async (event) => {
     
         // Adjust row height dynamically based on content
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 6);
-        const rowBottomY = rowTopY - dynamicRowHeight + 3 - moveUpAmount; // Move row bottom 5px up
+        const rowBottomY = rowTopY - dynamicRowHeight; // ✅ FIXED: Removed moveUpAmount
     
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + 5;
+        const textStartY = rowTopY - cellPadding; // ✅ FIXED: Adjusted to avoid extra upward movement
     
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -750,7 +750,7 @@ exports.handler = async (event) => {
             color: blackColor,
         });
     
-        // Draw horizontal line below the row (moved up 5px)
+        // Draw horizontal line below the row
         currentPage.drawLine({
             start: { x: tableXPositions[0], y: rowBottomY },
             end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
