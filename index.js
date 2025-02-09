@@ -608,7 +608,7 @@ exports.handler = async (event) => {
       const maxWidthForColumns = [30, 150, 60, 50, 100, 80];
 
       const rowHeight = 25;
-      // const cellPadding = ;
+      const cellPadding = 0;
       const minRowHeight = 18; // Slightly increased for better text alignment
       const lineHeight = 10;
 
