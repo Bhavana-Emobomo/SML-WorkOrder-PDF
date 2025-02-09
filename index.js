@@ -616,18 +616,18 @@ exports.handler = async (event) => {
     tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
             x: tableXPositions[index] + cellPadding,
-            y: itemY - 6,  // Move text slightly down for alignment
+            y: itemY - 5,  // Move text slightly down for alignment
             size: 9,
             font: timesRomanFontBold,
             color: blackColor,
         });
     });
     
-    // Draw horizontal header lines (moved up slightly)
-    const headerBottomY = itemY - rowHeight + 1; // Move lines up by 1px
+    // Draw horizontal header lines (moved up slightly more)
+    const headerBottomY = itemY - rowHeight + 2; // Move lines up by 1.5px
     currentPage.drawLine({
-        start: { x: tableXPositions[0], y: itemY + 1 }, // Move top line up
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 1 },
+        start: { x: tableXPositions[0], y: itemY + 2 }, // Move top line up
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 2 },
         thickness: 1,
         color: blackColor,
     });
@@ -641,7 +641,7 @@ exports.handler = async (event) => {
     // Draw vertical lines for headers
     tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
-            start: { x: xPos, y: itemY + 1 }, // Move vertical lines up slightly
+            start: { x: xPos, y: itemY + 2 }, // Move vertical lines up slightly more
             end: { x: xPos, y: headerBottomY },
             thickness: 1,
             color: blackColor,
@@ -650,7 +650,7 @@ exports.handler = async (event) => {
     
     // Right border for header
     currentPage.drawLine({
-        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 1 },
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + 2 },
         end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: headerBottomY },
         thickness: 1,
         color: blackColor,
@@ -687,7 +687,7 @@ exports.handler = async (event) => {
     
         // Adjust row height dynamically based on content
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 6);
-        const rowBottomY = rowTopY - dynamicRowHeight + 1; // Move row bottom line up
+        const rowBottomY = rowTopY - dynamicRowHeight + 2; // Move row bottom line up
     
         // Center text vertically inside the row
         const textStartY = rowTopY - (dynamicRowHeight / 2) + 4;
@@ -695,7 +695,7 @@ exports.handler = async (event) => {
         // Draw text for each column
         currentPage.drawText(item.SNO, {
             x: tableXPositions[0] + cellPadding,
-            y: textStartY - 1, // Move text slightly down
+            y: textStartY,
             size: 9,
             font: timesRomanFont,
             color: blackColor,
@@ -704,7 +704,7 @@ exports.handler = async (event) => {
         descriptionLines.forEach((line, index) => {
             currentPage.drawText(line, {
                 x: tableXPositions[1] + cellPadding,
-                y: textStartY - index * lineHeight - 1,
+                y: textStartY - index * lineHeight,
                 size: 9,
                 font: timesRomanFont,
                 color: blackColor,
@@ -714,7 +714,7 @@ exports.handler = async (event) => {
         ItemCodeLines.forEach((line, index) => {
             currentPage.drawText(line, {
                 x: tableXPositions[2] + cellPadding,
-                y: textStartY - index * lineHeight - 1,
+                y: textStartY - index * lineHeight,
                 size: 9,
                 font: timesRomanFont,
                 color: blackColor,
@@ -723,7 +723,7 @@ exports.handler = async (event) => {
     
         currentPage.drawText(item.Quantity, {
             x: tableXPositions[3] + cellPadding,
-            y: textStartY - 1,
+            y: textStartY,
             size: 9,
             font: timesRomanFont,
             color: blackColor,
@@ -732,7 +732,7 @@ exports.handler = async (event) => {
         PoLines.forEach((line, index) => {
             currentPage.drawText(line, {
                 x: tableXPositions[4] + cellPadding,
-                y: textStartY - index * lineHeight - 1,
+                y: textStartY - index * lineHeight,
                 size: 9,
                 font: timesRomanFont,
                 color: blackColor,
@@ -742,7 +742,7 @@ exports.handler = async (event) => {
         const formattedPODate = convertToDDMMYYYY(item.PODate);
         currentPage.drawText(formattedPODate, {
             x: tableXPositions[5] + cellPadding,
-            y: textStartY - 1,
+            y: textStartY,
             size: 9,
             font: timesRomanFont,
             color: blackColor,
@@ -778,7 +778,7 @@ exports.handler = async (event) => {
     });
     
     itemY -= 20;
-    
+     
     
       
       // Signature section
