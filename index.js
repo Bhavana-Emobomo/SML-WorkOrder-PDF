@@ -605,18 +605,18 @@ exports.handler = async (event) => {
     ];
     
     const tableXPositions = [25, 60, 220, 340, 390, 480];
-    const maxWidthForColumns = [30, 50, 60, 140, 180, 100];
+    const maxWidthForColumns = [30, 150, 60, 50, 100, 80];
     
     const rowHeight = 25;
     const cellPadding = 5;
     const minRowHeight = 18;
-    let lineHeight = 10;
+    const lineHeight = 10;
     
     // Draw table headers
     tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
             x: tableXPositions[index] + cellPadding,
-            y: itemY,
+            y: itemY - 5, // Adjust y for better alignment
             size: 9,
             font: timesRomanFontBold,
             color: blackColor,
@@ -679,21 +679,18 @@ exports.handler = async (event) => {
         const rowTopY = itemY; // Save row top position
     
         // Split text for wrapping
-        const ItemCodeLines = splitText(item.ItemCode, 110, 9, timesRomanFont);
-        const PoLines = splitText(item.ProjectNumber, 80, 9, timesRomanFont);
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[3], 9, timesRomanFont);
+        const descriptionLines = splitText(item.Description, maxWidthForColumns[1], 9, timesRomanFont);
+        const ItemCodeLines = splitText(item.ItemCode, maxWidthForColumns[2], 9, timesRomanFont);
+        const PoLines = splitText(item.ProjectNumber, maxWidthForColumns[4], 9, timesRomanFont);
     
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
     
         // Adjust row height dynamically based on content
-        const dynamicRowHeight = maxLinesInRow > 1
-            ? maxLinesInRow * lineHeight + 10
-            : minRowHeight;
+        const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 6);
+        const rowBottomY = rowTopY - dynamicRowHeight;
     
-        const rowBottomY = rowTopY - dynamicRowHeight; // Calculate bottom Y position for this row
-    
-        // Center text vertically within the row
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + 5;
+        // Center text vertically inside the row
+        const textStartY = rowTopY - (dynamicRowHeight / 2) + 4;
     
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -704,29 +701,19 @@ exports.handler = async (event) => {
             color: blackColor,
         });
     
-        ItemCodeLines.forEach((line, index) => {
-            currentPage.drawText(line, {
-                x: tableXPositions[2] + cellPadding,
-                y: textStartY - index * lineHeight,
-                size: 9,
-                font: timesRomanFont,
-                color: blackColor,
-            });
-        });
-    
-        PoLines.forEach((line, index) => {
-            currentPage.drawText(line, {
-                x: tableXPositions[4] + cellPadding,
-                y: textStartY - index * lineHeight,
-                size: 9,
-                font: timesRomanFont,
-                color: blackColor,
-            });
-        });
-    
         descriptionLines.forEach((line, index) => {
             currentPage.drawText(line, {
                 x: tableXPositions[1] + cellPadding,
+                y: textStartY - index * lineHeight,
+                size: 9,
+                font: timesRomanFont,
+                color: blackColor,
+            });
+        });
+    
+        ItemCodeLines.forEach((line, index) => {
+            currentPage.drawText(line, {
+                x: tableXPositions[2] + cellPadding,
                 y: textStartY - index * lineHeight,
                 size: 9,
                 font: timesRomanFont,
@@ -740,6 +727,16 @@ exports.handler = async (event) => {
             size: 9,
             font: timesRomanFont,
             color: blackColor,
+        });
+    
+        PoLines.forEach((line, index) => {
+            currentPage.drawText(line, {
+                x: tableXPositions[4] + cellPadding,
+                y: textStartY - index * lineHeight,
+                size: 9,
+                font: timesRomanFont,
+                color: blackColor,
+            });
         });
     
         const formattedPODate = convertToDDMMYYYY(item.PODate);
@@ -759,7 +756,7 @@ exports.handler = async (event) => {
             color: blackColor,
         });
     
-        // Fix vertical lines by ensuring they span the correct height
+        // Fix vertical lines to align properly
         tableXPositions.forEach((xPos) => {
             currentPage.drawLine({
                 start: { x: xPos, y: rowTopY },
@@ -781,7 +778,7 @@ exports.handler = async (event) => {
     });
     
     itemY -= 20;
-      
+    
       
       // Signature section
       if (itemY - 60 < footerSpace) {
