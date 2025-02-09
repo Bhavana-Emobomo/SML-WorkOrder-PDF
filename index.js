@@ -609,16 +609,19 @@ const maxWidthForColumns = [30, 150, 60, 50, 100, 80];
 
 const rowHeight = 25;
 const cellPadding = 6;
-const minRowHeight = 22;  
+const minRowHeight = 22;
 const lineHeight = 10;
+
+// 🛠 Table ko thoda upar shift karne ke liye value adjust ki
+const tableShiftUp = 10;  // Yahan adjust karo (jitna upar chahiye)
 
 const moveUpAmount = 3;  
 
-// Draw table headers
+// Draw table headers (Table upar shift ho raha hai)
 tableHeaders.forEach((header, index) => {
     currentPage.drawText(header, {
         x: tableXPositions[index] + cellPadding,
-        y: itemY - (rowHeight / 2) + 9, // 🔥 EXACT MIDDLE
+        y: itemY - (rowHeight / 2) + 9 + tableShiftUp, // 🔥 Table upar shift
         size: 9,
         font: timesRomanFontBold,
         color: blackColor,
@@ -626,10 +629,10 @@ tableHeaders.forEach((header, index) => {
 });
 
 // Adjusted header line positions
-const headerBottomY = itemY - rowHeight;
+const headerBottomY = itemY - rowHeight + tableShiftUp;
 currentPage.drawLine({
-    start: { x: tableXPositions[0], y: itemY },
-    end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
+    start: { x: tableXPositions[0], y: itemY + tableShiftUp },
+    end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + tableShiftUp },
     thickness: 1,
     color: blackColor,
 });
@@ -643,17 +646,17 @@ currentPage.drawLine({
 // Adjusted vertical line positions
 tableXPositions.forEach((xPos) => {
     currentPage.drawLine({
-        start: { x: xPos, y: itemY },
+        start: { x: xPos, y: itemY + tableShiftUp },
         end: { x: xPos, y: headerBottomY },
         thickness: 1,
         color: blackColor,
     });
 });
 
-// Move to first row
+// Move to first row (Table upar ho gaya, content same jagah)
 itemY = headerBottomY;
 
-// Draw table rows
+// Draw table rows (Content ka position change nahi hoga)
 listItems.forEach((item) => {
     if (itemY < footerSpace) {
         currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
@@ -683,7 +686,7 @@ listItems.forEach((item) => {
     const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + 8);
     const rowBottomY = rowTopY - dynamicRowHeight;
 
-    // 🔥 Center-align text (EXACT CENTER)
+    // 🔥 Content ko same jagah rakha (Table hi sirf shift kiya)
     const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2);
 
     // Draw text for each column
@@ -772,6 +775,7 @@ listItems.forEach((item) => {
 });
 
 itemY -= 20;
+
 
 
       // Signature section
