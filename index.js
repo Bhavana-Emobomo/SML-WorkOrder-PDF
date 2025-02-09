@@ -609,7 +609,7 @@ exports.handler = async (event) => {
       
       const rowHeight = 25;
       const cellPadding = 5;
-      const minRowHeight = 20;
+      const minRowHeight = 20; // Minimum height for single-line rows
       let lineHeight = 10;
       
       // Draw table headers
@@ -695,8 +695,10 @@ exports.handler = async (event) => {
       
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
       
-        // Ensure enough space for single-line rows
-        const dynamicRowHeight = Math.max(maxLinesInRow * lineHeight, minRowHeight);
+        // For rows with more than one line, add extra spacing
+        const dynamicRowHeight = maxLinesInRow > 1
+          ? maxLinesInRow * lineHeight + 10  // Add extra space if more than one line
+          : minRowHeight;  // Keep compact if only one line
       
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -793,8 +795,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
-         
-
+      
       // Signature section
       if (itemY - 60 < footerSpace) {
         if (!isNextPageNeededFooter) {
