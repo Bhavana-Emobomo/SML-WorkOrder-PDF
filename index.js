@@ -767,7 +767,7 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        // Draw vertical lines for each row
+        // Fixing the vertical lines by ensuring they span the correct height
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
             start: { x: xPos, y: rowTextY + dynamicRowHeight / 2 },
@@ -795,6 +795,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
+      
       
       // Signature section
       if (itemY - 60 < footerSpace) {
