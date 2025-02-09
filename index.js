@@ -692,7 +692,10 @@ exports.handler = async (event) => {
       
         const maxLinesInRow = Math.max(ItemCodeLines.length, PoLines.length, descriptionLines.length, 1);
       
-        const dynamicRowHeight = maxLinesInRow > 2 ? maxLinesInRow * lineHeight + 10 : maxLinesInRow * lineHeight + 5;
+        // Adjust row height: compact for short rows, extra space for multi-line rows
+        const dynamicRowHeight = maxLinesInRow > 2 
+          ? maxLinesInRow * lineHeight + 10  // More space for multi-line rows
+          : maxLinesInRow * lineHeight + 2;  // Compact for 1-2 line rows
       
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
@@ -772,6 +775,7 @@ exports.handler = async (event) => {
       });
       
       itemY -= 20;
+      
       
       
 
