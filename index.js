@@ -189,7 +189,7 @@ exports.handler = async (event) => {
       const rowHeight = 25;
       const cellPadding = 2;
       const minRowHeight = 18; // Slightly increased for better text alignment
-      const lineHeight = 5;
+      const lineHeight = 10;
       const headerMoveOffset = -3;
       // Move horizontal lines and text slightly up
       const moveUpAmount = 3; // Fine-tuned for best alignment
