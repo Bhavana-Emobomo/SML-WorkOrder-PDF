@@ -298,7 +298,7 @@ exports.handler = async (event) => {
         );
 
         // Dynamically calculate row height based on the longest column text
-        const extraSpacing = (maxLinesInRow - 1) * 9; // 6px extra per additional line
+        const extraSpacing = (maxLinesInRow - 1) * 12; // 6px extra per additional line
         const dynamicRowHeight = Math.max(
           minRowHeight,
           maxLinesInRow * lineHeight + extraSpacing
