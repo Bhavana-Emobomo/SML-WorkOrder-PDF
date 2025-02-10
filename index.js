@@ -426,7 +426,7 @@ exports.handler = async (event) => {
         textLinesComments = splitText(
           Comments,
           maxWidthComments,
-          14,
+          20,
           timesRomanFont
         );
       } else {
