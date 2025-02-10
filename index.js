@@ -624,14 +624,16 @@ exports.handler = async (event) => {
       const maxWidthForColumns = [30, 50, 60, 140, 180, 100]; 
   
       const rowHeight = 25;
-      const cellPadding = 5;
-      let lineHeight = 10;
+      const cellPadding = 2;
+      const minRowHeight = 18; // Slightly increased for better text alignment
+      const lineHeight = 10;
+      const headerMoveOffset = -3;
   
       // Draw table headers with padding and borders
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
           x: tableXPositions[index] + cellPadding,
-          y: itemY,
+          y: itemY - rowHeight / 2 + headerMoveOffset, // Move header up/down
           size: 9,
           font: timesRomanFontBold,
           color: blackColor,
@@ -733,7 +735,7 @@ exports.handler = async (event) => {
           1  // Ensure there's at least one line for each field
         );
   
-        const dynamicRowHeight = maxLinesInRow * lineHeight +15;  
+        const dynamicRowHeight = maxLinesInRow * lineHeight + 25;  
   
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
