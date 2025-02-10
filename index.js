@@ -183,17 +183,40 @@ exports.handler = async (event) => {
         "Quantity",
         "WorkOrderId",
       ];
+      
       const tableXPositions = [25, 60, 280, 430, 480];
       const maxWidthForColumns = [30, 430, 140, 180, 100]; // Adjusted max width for Description column
       
-      const rowHeight = 25;  // Row height set to 25
-      const cellPadding = 2;  // Padding set to 2
+      const rowHeight = 25; // Row height set to 25
+      const cellPadding = 2; // Padding set to 2
       const minRowHeight = 18; // Minimum row height
-      const lineHeight = 10;  // Line height set to 10
+      const lineHeight = 10; // Line height set to 10
       
       // let itemY = 740; // Example starting position for Y coordinate
       let currentPageNumber = 1;
       let isNextPageNeeded = false;
+      
+      // Function to split text into multiple lines based on column width
+      function splitText(text, maxWidth, fontSize, font) {
+        const words = text.split(" ");
+        let lines = [];
+        let currentLine = "";
+      
+        words.forEach((word) => {
+          let testLine = currentLine ? currentLine + " " + word : word;
+          const textWidth = font.widthOfTextAtSize(testLine, fontSize);
+      
+          if (textWidth < maxWidth) {
+            currentLine = testLine;
+          } else {
+            lines.push(currentLine);
+            currentLine = word;
+          }
+        });
+      
+        if (currentLine) lines.push(currentLine);
+        return lines;
+      }
       
       // Draw table headers with padding and borders
       tableHeaders.forEach((header, index) => {
@@ -209,10 +232,7 @@ exports.handler = async (event) => {
       // Draw horizontal line above header row (top border)
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY + rowHeight / 2,
-        },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
@@ -220,15 +240,12 @@ exports.handler = async (event) => {
       // Draw horizontal line below header row (bottom border)
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY - rowHeight / 2,
-        },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
       
-      // Draw vertical lines for header columns (excluding right line)
+      // Draw vertical lines for header columns
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
           start: { x: xPos, y: itemY + rowHeight / 2 },
@@ -240,14 +257,8 @@ exports.handler = async (event) => {
       
       // Draw right vertical line after the header
       currentPage.drawLine({
-        start: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY + rowHeight / 2,
-        },
-        end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
-          y: itemY - rowHeight / 2,
-        },
+        start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY + rowHeight / 2 },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY - rowHeight / 2 },
         thickness: 1,
         color: blackColor,
       });
@@ -265,37 +276,37 @@ exports.handler = async (event) => {
           });
       
           itemY -= 20; // Adjust Y to start content below the message
-          // Add a new page when space is insufficient
           currentPage = pdfDoc.addPage();
           currentPageNumber++; // Increment page number
           itemY = 740; // Reset Y position for the new page
-      
-          // Set isNextPageNeeded to false after message is drawn
-          isNextPageNeeded = false;
         }
       
         const rowTextY = itemY;
-        const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[1], 9, timesRomanFont); // Full width for description
-        const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
+      
+        // Splitting text into lines based on column width
+        const ItemCodeLines = splitText(item.ItemCode, maxWidthForColumns[2], 9, timesRomanFont);
+        const descriptionLines = splitText(item.Description, maxWidthForColumns[1], 9, timesRomanFont);
+        const WorkOrderLines = splitText(item.WorkOrderId, maxWidthForColumns[4], 9, timesRomanFont);
       
         const maxLinesInRow = Math.max(
           ItemCodeLines.length,
-          WorkOrderLines.length,
           descriptionLines.length,
-          1 // Ensure there's at least one line for each field
+          WorkOrderLines.length,
+          1 // Ensure at least one line per cell
         );
       
-        // Dynamic row height, considering line height and padding
-        const dynamicRowHeight = Math.max(maxLinesInRow * lineHeight + 15, minRowHeight); // Ensure the row height doesn't go below minRowHeight
+        // Dynamically adjust row height based on the longest column
+        const dynamicRowHeight = Math.max(maxLinesInRow * lineHeight + 5, minRowHeight);
       
-        // Draw each cell's content with padding
-        currentPage.drawText(item.SNO, {
-          x: tableXPositions[0] + cellPadding,
-          y: rowTextY,
-          size: 9,
-          font: timesRomanFont,
-          color: blackColor,
+        // Drawing text with line wrapping
+        descriptionLines.forEach((line, index) => {
+          currentPage.drawText(line, {
+            x: tableXPositions[1] + cellPadding,
+            y: rowTextY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
+          });
         });
       
         ItemCodeLines.forEach((line, index) => {
@@ -318,15 +329,13 @@ exports.handler = async (event) => {
           });
         });
       
-        // Draw cell content for Description
-        descriptionLines.forEach((line, index) => {
-          currentPage.drawText(line, {
-            x: tableXPositions[1] + cellPadding,
-            y: rowTextY - index * lineHeight,
-            size: 9,
-            font: timesRomanFont,
-            color: blackColor,
-          });
+        // Draw Quantity and SNO at the top of the row (single-line fields)
+        currentPage.drawText(item.SNO, {
+          x: tableXPositions[0] + cellPadding,
+          y: rowTextY,
+          size: 9,
+          font: timesRomanFont,
+          color: blackColor,
         });
       
         currentPage.drawText(item.Quantity, {
@@ -340,15 +349,12 @@ exports.handler = async (event) => {
         // Draw horizontal line below each row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
-          end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight / 2,
-          },
+          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight / 2 },
           thickness: 1,
           color: blackColor,
         });
       
-        // Draw vertical lines for each row cell, including right border
+        // Draw vertical lines for each row cell
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
             start: { x: xPos, y: rowTextY + dynamicRowHeight - 12 },
@@ -357,23 +363,21 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
+      
+        // Rightmost border
         currentPage.drawLine({
-          start: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY + dynamicRowHeight - 12,
-          },
-          end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
-            y: rowTextY - dynamicRowHeight + 12,
-          },
+          start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY + dynamicRowHeight - 12 },
+          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTextY - dynamicRowHeight + 12 },
           thickness: 1,
           color: blackColor,
         });
       
+        // Move to the next row position
         itemY -= dynamicRowHeight;
       });
       
       itemY -= 20;
+      
       
     
 
