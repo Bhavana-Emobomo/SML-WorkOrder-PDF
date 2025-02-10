@@ -624,7 +624,7 @@ exports.handler = async (event) => {
       const rowHeight = 25; // Row height set to 25
       const cellPadding = 2; // Padding set to 2
       const minRowHeight = 18; // Minimum row height
-      const lineHeight = 10; // Line height set to 10
+      const lineHeight = 2; // Line height set to 10
 
       // let itemY = 740; // Example starting position for Y coordinate
       let currentPageNumber = 1;
