@@ -187,7 +187,7 @@ exports.handler = async (event) => {
       const maxWidthForColumns = [30, 80, 140, 180, 100];
       
       const rowHeight = 25;
-      const cellPadding = 2;
+      const cellPadding = 0;
       const minRowHeight = 18; // Slightly increased for better text alignment
       const lineHeight = 10;
       
@@ -303,7 +303,7 @@ exports.handler = async (event) => {
         const rowBottomY = rowTopY - dynamicRowHeight;
       
         // Adjusted text position for centering within the row
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - (maxLinesInRow > 1 ? (maxLinesInRow - 1) * 2 : 0);      
+        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - (maxLinesInRow > 1 ? (maxLinesInRow - 1) * 3 : 0);      
         // Draw text for each column (Perfectly centered)
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
