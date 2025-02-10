@@ -322,7 +322,7 @@ exports.handler = async (event) => {
           // Adjust the Y-position to ensure no extra space at the top
           currentPage.drawText(line, {
             x: tableXPositions[1] + cellPadding,
-            y: textStartY - index * lineHeight - 6, // Apply moveUpAmount here to reduce top space
+            y: textStartY - index * lineHeight + 3, // Apply moveUpAmount here to reduce top space
             size: 9,
             font: timesRomanFont,
             color: blackColor,
