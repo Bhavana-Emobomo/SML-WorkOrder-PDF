@@ -190,7 +190,7 @@ exports.handler = async (event) => {
       const cellPadding = 2;
       const minRowHeight = 18; // Slightly increased for better text alignment
       const lineHeight = 20;
-      const headerMoveOffset = -5;
+      const headerMoveOffset = -3;
       // Move horizontal lines and text slightly up
       const moveUpAmount = 3; // Fine-tuned for best alignment
       
@@ -298,7 +298,7 @@ exports.handler = async (event) => {
         );
       
         // Dynamically calculate row height based on the longest column text
-        const extraSpacing = (maxLinesInRow - 1) * 9; // 6px extra per additional line
+        const extraSpacing = (maxLinesInRow - 1) * 20; // 6px extra per additional line
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
