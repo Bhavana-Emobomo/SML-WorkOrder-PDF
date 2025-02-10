@@ -322,7 +322,7 @@ exports.handler = async (event) => {
           // Adjust the Y-position to ensure no extra space at the top
           currentPage.drawText(line, {
             x: tableXPositions[1] + cellPadding,
-            y: textStartY - index * lineHeight , // Apply moveUpAmount here to reduce top space
+            y: textStartY - index * lineHeight, // Apply moveUpAmount here to reduce top space
             size: 9,
             font: timesRomanFont,
             color: blackColor,
@@ -441,17 +441,19 @@ exports.handler = async (event) => {
           font: timesRomanFontBold,
           color: blackColor,
         });
+        itemY -= 20; // Move down after drawing "Note:"
       }
 
+      // Draw each comment line with proper spacing
       for (const line of textLinesComments) {
         currentPage.drawText(line, {
           x: 55,
-          y: itemY - 6,
+          y: itemY,
           size: 12,
           font: timesRomanFont,
           color: blackColor,
         });
-        itemY -= 8;
+        itemY -= 16; // Move down properly for the next line
       }
 
       //  currentPage.drawText(`${Comments}`, {
