@@ -186,8 +186,8 @@ exports.handler = async (event) => {
     const tableXPositions = [25, 60, 280, 430, 480];
     const maxWidthForColumns = [30, 80, 140, 180, 100];
     
-    const rowHeight = 60;
-    const cellPadding = 5;
+    const rowHeight = 25;
+    const cellPadding = 2;
     const minRowHeight = 18; // Slightly increased for better text alignment
     const lineHeight = 10;
     
