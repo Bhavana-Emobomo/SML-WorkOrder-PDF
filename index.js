@@ -176,6 +176,81 @@ exports.handler = async (event) => {
 
       // Table headers
 
+      const tableHeaders = [
+        "SNO",
+        "Description",
+        "Item Code",
+        "Quantity",
+        "WorkOrderId",
+      ];
+      const tableXPositions = [25, 60, 280, 430, 480];
+      const maxWidthForColumns = [30, 80, 140, 180, 100];
+      
+      const rowHeight = 25;
+      const cellPadding = 2;
+      const minRowHeight = 18; // Slightly increased for better text alignment
+      const lineHeight = 10;
+      
+      // Move horizontal lines and text slightly up
+      const moveUpAmount = 3; // Fine-tuned for best alignment
+      
+      // Draw table headers
+      tableHeaders.forEach((header, index) => {
+        currentPage.drawText(header, {
+          x: tableXPositions[index] + cellPadding,
+          y: itemY - rowHeight / 2 + 3, // Centering header text
+          size: 9,
+          font: timesRomanFontBold,
+          color: blackColor,
+        });
+      });
+      
+      // Adjusted header line positions
+      const headerBottomY = itemY - rowHeight;
+      currentPage.drawLine({
+        start: { x: tableXPositions[0], y: itemY },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
+        thickness: 1,
+        color: blackColor,
+      });
+      currentPage.drawLine({
+        start: { x: tableXPositions[0], y: headerBottomY },
+        end: {
+          x: tableXPositions[tableXPositions.length - 1] + 100,
+          y: headerBottomY,
+        },
+        thickness: 1,
+        color: blackColor,
+      });
+      
+      // Adjusted vertical line positions
+      tableXPositions.forEach((xPos) => {
+        currentPage.drawLine({
+          start: { x: xPos, y: itemY },
+          end: { x: xPos, y: headerBottomY },
+          thickness: 1,
+          color: blackColor,
+        });
+      });
+      
+      // Right border for header
+      currentPage.drawLine({
+        start: {
+          x: tableXPositions[tableXPositions.length - 1] + 100,
+          y: itemY,
+        },
+        end: {
+          x: tableXPositions[tableXPositions.length - 1] + 100,
+          y: headerBottomY,
+        },
+        thickness: 1,
+        color: blackColor,
+      });
+      
+      // Move to first row
+      itemY = headerBottomY;
+      
+      // Draw table rows
       listItems.forEach((item) => {
         if (itemY < footerSpace) {
           currentPage.drawText(`Continuation of Page ${currentPageNumber}`, {
@@ -230,12 +305,6 @@ exports.handler = async (event) => {
         // Adjusted text position for centering within the row
         const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 6;
       
-        // Adjust Description cell position to reduce top space
-        let descriptionTextStartY = textStartY; // Start with the same position
-        if (descriptionLines.length > 1) {
-          descriptionTextStartY -= 2; // Adjust if Description is wrapped in multiple lines
-        }
-      
         // Draw text for each column (Perfectly centered)
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
@@ -245,10 +314,12 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
+        // Adjust Description Column Y-Position
         descriptionLines.forEach((line, index) => {
+          // Adjust the Y-position to ensure no extra space at the top
           currentPage.drawText(line, {
             x: tableXPositions[1] + cellPadding,
-            y: descriptionTextStartY - index * lineHeight,
+            y: textStartY - index * lineHeight - moveUpAmount,  // Apply moveUpAmount here to reduce top space
             size: 9,
             font: timesRomanFont,
             color: blackColor,
