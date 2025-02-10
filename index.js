@@ -691,7 +691,7 @@ exports.handler = async (event) => {
           itemY -= 20;
           currentPage = pdfDoc.addPage();
           currentPageNumber++;
-          itemY = 740;
+          itemY = 100;
         }
       
         const rowTopY = itemY;
