@@ -697,7 +697,7 @@ exports.handler = async (event) => {
         const rowTopY = itemY;
       
         // Split text for wrapping (keeping first table's text wrapping)
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[1] * 2.2, 9, timesRomanFont);
+        const descriptionLines = splitText(item.Description, maxWidthForColumns[1] * 1.9, 9, timesRomanFont);
         const itemCodeLines = splitText(item.ItemCode, maxWidthForColumns[2], 9, timesRomanFont);
         const poNumberLines = splitText(item.ProjectNumber, maxWidthForColumns[4], 9, timesRomanFont);
         const poDateFormatted = convertToDDMMYYYY(item.PODate);
