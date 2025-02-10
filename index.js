@@ -631,8 +631,6 @@ exports.handler = async (event) => {
       const headerMoveOffset = -3;
       const moveUpAmount = 3;
       
-      itemY = 740;  // Starting Y position
-      
       // Draw table headers with styling from first table
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
@@ -696,7 +694,7 @@ exports.handler = async (event) => {
           itemY = 740;
         }
       
-        const rowTopY = itemY; // Current row top Y position
+        const rowTopY = itemY;
       
         // Split text for wrapping (keeping first table's text wrapping)
         const descriptionLines = splitText(item.Description, maxWidthForColumns[1] * 1.9, 9, timesRomanFont);
@@ -713,7 +711,7 @@ exports.handler = async (event) => {
         const rowBottomY = rowTopY - dynamicRowHeight;
       
         // Adjusted text position for centering within the row
-        const textStartY = rowTopY - dynamicRowHeight / 2 + lineHeight / 2 - 8;
+        const textStartY = rowTopY + (dynamicRowHeight/50) - 100;
       
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -801,12 +799,10 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       
-        // Update itemY for the next row
-        itemY = rowBottomY;
+        itemY = rowBottomY; // Move to the next row
       });
       
       itemY -= 20;
-      
       // Space after rows before next content
 
       // Signature section
