@@ -707,7 +707,7 @@ exports.handler = async (event) => {
       
         // Dynamic row height based on first table styling
         const extraSpacing = (maxLinesInRow - 1) * 15; // 6px extra per additional line
-        const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight - extraSpacing * 2);
+        const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
         // Adjusted text position for centering within the row
