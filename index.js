@@ -190,6 +190,7 @@ exports.handler = async (event) => {
       const cellPadding = 2;
       const minRowHeight = 18; // Slightly increased for better text alignment
       const lineHeight = 10;
+      const headerMoveOffset = 10;
       
       // Move horizontal lines and text slightly up
       const moveUpAmount = 3; // Fine-tuned for best alignment
@@ -198,7 +199,7 @@ exports.handler = async (event) => {
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
           x: tableXPositions[index] + cellPadding,
-          y: itemY - rowHeight / 2 + 3, // Centering header text
+          y: itemY - rowHeight / 2 + headerMoveOffset, // Move header up/down
           size: 9,
           font: timesRomanFontBold,
           color: blackColor,
