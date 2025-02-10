@@ -436,7 +436,7 @@ exports.handler = async (event) => {
       if (isComments) {
         currentPage.drawText("Note:", {
           x: 20,
-          y: itemY - 10, // Adjust this value to move the note down
+          y: itemY - 6, // Adjust this value to move the note down
           size: 14,
           font: timesRomanFontBold,
           color: blackColor,
@@ -446,7 +446,7 @@ exports.handler = async (event) => {
       for (const line of textLinesComments) {
         currentPage.drawText(line, {
           x: 55,
-          y: itemY - 10,
+          y: itemY - 6,
           size: 12,
           font: timesRomanFont,
           color: blackColor,
