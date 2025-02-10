@@ -416,7 +416,7 @@ exports.handler = async (event) => {
         itemY = 740;
       }
 
-      const maxWidthComments = 900; // Adjust width as needed
+      const maxWidthComments = 600; // Adjust width as needed
       console.log(Comments);
       const isComments = Comments ? true : false; // True if comments exist
 
