@@ -426,7 +426,7 @@ exports.handler = async (event) => {
         textLinesComments = splitText(
           Comments,
           maxWidthComments,
-          20,
+          14,
           timesRomanFont
         );
       } else {
@@ -453,7 +453,7 @@ exports.handler = async (event) => {
         });
       
         // Move itemY down for the next line
-        itemY -= 8;
+        itemY -= 16;
       }
 
       //  currentPage.drawText(`${Comments}`, {
