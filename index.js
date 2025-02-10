@@ -463,21 +463,21 @@ exports.handler = async (event) => {
       // });
 
       currentPage.drawText("For Sri Mahalakshmi Engineering Works,", {
-        x: 50,
+        x: 20,
         y: itemY - 20,
         size: 12,
         font: timesRomanFontBold,
         color: blackColor,
       });
       currentPage.drawText("Authorized Signature", {
-        x: 50,
+        x: 20,
         y: itemY - 35,
         size: 12,
         font: timesRomanFont,
         color: blackColor,
       });
 
-      currentPage.drawText("Receiver Name and Signature ,", {
+      currentPage.drawText("Receiver Name and Signature", {
         x: 350,
         y: itemY - 20,
         size: 12,
@@ -486,7 +486,7 @@ exports.handler = async (event) => {
       });
 
       currentPage.drawText("Checked By,", {
-        x: 50,
+        x: 20,
         y: itemY - 80,
         size: 14,
         font: timesRomanFontBold,
@@ -494,7 +494,7 @@ exports.handler = async (event) => {
       });
 
       currentPage.drawText("Note: This is Auto computer generated gatepass", {
-        x: 50,
+        x: 20,
         y: itemY - 110,
         size: 8,
         font: timesRomanFont,
