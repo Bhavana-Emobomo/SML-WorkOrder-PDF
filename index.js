@@ -298,7 +298,7 @@ exports.handler = async (event) => {
         );
 
         // Dynamically calculate row height based on the longest column text
-        const extraSpacing = (maxLinesInRow - 1) * 12; // 6px extra per additional line
+        const extraSpacing = (maxLinesInRow - 1) * 15; // 6px extra per additional line
         const dynamicRowHeight = Math.max(
           minRowHeight,
           maxLinesInRow * lineHeight + extraSpacing
@@ -322,7 +322,7 @@ exports.handler = async (event) => {
           // Adjust the Y-position to ensure no extra space at the top
           currentPage.drawText(line, {
             x: tableXPositions[1] + cellPadding,
-            y: textStartY - index * lineHeight + 3, // Apply moveUpAmount here to reduce top space
+            y: textStartY - index * lineHeight , // Apply moveUpAmount here to reduce top space
             size: 9,
             font: timesRomanFont,
             color: blackColor,
