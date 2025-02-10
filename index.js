@@ -306,7 +306,7 @@ exports.handler = async (event) => {
         const rowBottomY = rowTopY - dynamicRowHeight;
 
         // Adjusted text position for centering within the row
-        const textStartY = rowTopY - dynamicRowHeight / 2 + lineHeight / 2 - 6;
+        const textStartY = rowTopY - dynamicRowHeight / 2 + lineHeight / 2 - 8;
 
         // Draw text for each column (Perfectly centered)
         currentPage.drawText(item.SNO, {
@@ -735,7 +735,7 @@ exports.handler = async (event) => {
 
         // Dynamic row height, considering line height and padding
         const dynamicRowHeight = Math.max(
-          maxLinesInRow * lineHeight + 6,
+          maxLinesInRow * lineHeight + 15,
           minRowHeight
         ); // Ensure the row height doesn't go below minRowHeight
 
