@@ -270,55 +270,97 @@ exports.handler = async (event) => {
         const rowTopY = itemY;
       
         // Split text for wrapping
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[1] * 2.2, 9, timesRomanFont);
-        const ItemCodeLines = splitText(item.ItemCode, maxWidthForColumns[2], 9, timesRomanFont);
-        const WorkOrderLines = splitText(item.WorkOrderId, maxWidthForColumns[4], 9, timesRomanFont);
+        const descriptionLines = splitText(
+          item.Description,
+          maxWidthForColumns[1] * 2.2, // Increase width by 10%
+          9,
+          timesRomanFont
+        );
+        const ItemCodeLines = splitText(
+          item.ItemCode,
+          maxWidthForColumns[2],
+          9,
+          timesRomanFont
+        );
+        const WorkOrderLines = splitText(
+          item.WorkOrderId,
+          maxWidthForColumns[4],
+          9,
+          timesRomanFont
+        );
       
         // Calculate max lines per row
-        const maxLinesInRow = Math.max(descriptionLines.length, ItemCodeLines.length, WorkOrderLines.length, 1);
+        const maxLinesInRow = Math.max(
+          descriptionLines.length,
+          ItemCodeLines.length,
+          WorkOrderLines.length,
+          1
+        );
       
-        // Dynamically calculate row height
-        const extraSpacing = (maxLinesInRow - 1) * 8;
+        // Dynamically calculate row height based on the longest column text
+        const extraSpacing = (maxLinesInRow - 1) * 8; // 6px extra per additional line
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
-        // Center text in cell
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2);
+        // Adjusted text position for centering within the row
+        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 6;
       
-        // Function to center text horizontally
-        function drawCenteredText(text, xPosition, yPosition, maxWidth) {
-          const textWidth = timesRomanFont.widthOfTextAtSize(text, 9);
-          const centeredX = xPosition + (maxWidth / 2) - (textWidth / 2);
-          currentPage.drawText(text, {
-            x: centeredX,
-            y: yPosition,
+        // Draw text for each column (Perfectly centered)
+        currentPage.drawText(item.SNO, {
+          x: tableXPositions[0] + cellPadding,
+          y: textStartY,
+          size: 9,
+          font: timesRomanFont,
+          color: blackColor,
+        });
+      
+        // Adjust Description Column Y-Position
+        descriptionLines.forEach((line, index) => {
+          // Adjust the Y-position to ensure no extra space at the top
+          currentPage.drawText(line, {
+            x: tableXPositions[1] + cellPadding,
+            y: textStartY - index * lineHeight - moveUpAmount,  // Apply moveUpAmount here to reduce top space
             size: 9,
             font: timesRomanFont,
             color: blackColor,
           });
-        }
-      
-        // Draw text centered in each column
-        drawCenteredText(item.SNO, tableXPositions[0], textStartY, maxWidthForColumns[0]);
-      
-        descriptionLines.forEach((line, index) => {
-          drawCenteredText(line, tableXPositions[1], textStartY - index * lineHeight, maxWidthForColumns[1]);
         });
       
         ItemCodeLines.forEach((line, index) => {
-          drawCenteredText(line, tableXPositions[2], textStartY - index * lineHeight, maxWidthForColumns[2]);
+          currentPage.drawText(line, {
+            x: tableXPositions[2] + cellPadding,
+            y: textStartY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
+          });
         });
       
-        drawCenteredText(item.Quantity, tableXPositions[3], textStartY, maxWidthForColumns[3]);
+        currentPage.drawText(item.Quantity, {
+          x: tableXPositions[3] + cellPadding,
+          y: textStartY,
+          size: 9,
+          font: timesRomanFont,
+          color: blackColor,
+        });
       
         WorkOrderLines.forEach((line, index) => {
-          drawCenteredText(line, tableXPositions[4], textStartY - index * lineHeight, maxWidthForColumns[4]);
+          currentPage.drawText(line, {
+            x: tableXPositions[4] + cellPadding,
+            y: textStartY - index * lineHeight,
+            size: 9,
+            font: timesRomanFont,
+            color: blackColor,
+          });
         });
       
         // Draw horizontal line below the row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowBottomY },
-          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
+          end: {
+            x: tableXPositions[tableXPositions.length - 1] + 100,
+            y: rowBottomY,
+          },
           thickness: 1,
           color: blackColor,
         });
@@ -335,15 +377,20 @@ exports.handler = async (event) => {
       
         // Right border for each row
         currentPage.drawLine({
-          start: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowTopY },
-          end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: rowBottomY },
+          start: {
+            x: tableXPositions[tableXPositions.length - 1] + 100,
+            y: rowTopY,
+          },
+          end: {
+            x: tableXPositions[tableXPositions.length - 1] + 100,
+            y: rowBottomY,
+          },
           thickness: 1,
           color: blackColor,
         });
       
         itemY = rowBottomY; // Move to the next row
       });
-       // Move to the next row
       
       itemY -= 20;
       
