@@ -298,12 +298,12 @@ exports.handler = async (event) => {
         );
       
         // Dynamically calculate row height based on the longest column text
-        const extraSpacing = (maxLinesInRow - 1) * 20; // 6px extra per additional line
+        const extraSpacing = (maxLinesInRow - 1) * 9; // 6px extra per additional line
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
         // Adjusted text position for centering within the row
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 7;
+        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 20;
       
         // Draw text for each column (Perfectly centered)
         currentPage.drawText(item.SNO, {
