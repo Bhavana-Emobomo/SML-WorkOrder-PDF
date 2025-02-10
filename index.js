@@ -185,7 +185,7 @@ exports.handler = async (event) => {
       ];
       const tableXPositions = [25, 60, 280, 430, 480];
       const maxWidthForColumns = [30, 80, 140, 180, 100];
-      
+
       const rowHeight = 25;
       const cellPadding = 2;
       const minRowHeight = 18; // Slightly increased for better text alignment
@@ -193,7 +193,7 @@ exports.handler = async (event) => {
       const headerMoveOffset = -3;
       // Move horizontal lines and text slightly up
       const moveUpAmount = 3; // Fine-tuned for best alignment
-      
+
       // Draw table headers
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
@@ -204,7 +204,7 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       });
-      
+
       // Adjusted header line positions
       const headerBottomY = itemY - rowHeight;
       currentPage.drawLine({
@@ -222,7 +222,7 @@ exports.handler = async (event) => {
         thickness: 1,
         color: blackColor,
       });
-      
+
       // Adjusted vertical line positions
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
@@ -232,7 +232,7 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       });
-      
+
       // Right border for header
       currentPage.drawLine({
         start: {
@@ -246,10 +246,10 @@ exports.handler = async (event) => {
         thickness: 1,
         color: blackColor,
       });
-      
+
       // Move to first row
       itemY = headerBottomY;
-      
+
       // Draw table rows
       listItems.forEach((item) => {
         if (itemY < footerSpace) {
@@ -260,15 +260,15 @@ exports.handler = async (event) => {
             font: timesRomanFontBold,
             color: blackColor,
           });
-      
+
           itemY -= 20;
           currentPage = pdfDoc.addPage();
           currentPageNumber++;
           itemY = 740;
         }
-      
+
         const rowTopY = itemY;
-      
+
         // Split text for wrapping
         const descriptionLines = splitText(
           item.Description,
@@ -288,7 +288,7 @@ exports.handler = async (event) => {
           9,
           timesRomanFont
         );
-      
+
         // Calculate max lines per row
         const maxLinesInRow = Math.max(
           descriptionLines.length,
@@ -296,15 +296,18 @@ exports.handler = async (event) => {
           WorkOrderLines.length,
           1
         );
-      
+
         // Dynamically calculate row height based on the longest column text
         const extraSpacing = (maxLinesInRow - 1) * 9; // 6px extra per additional line
-        const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + extraSpacing);
+        const dynamicRowHeight = Math.max(
+          minRowHeight,
+          maxLinesInRow * lineHeight + extraSpacing
+        );
         const rowBottomY = rowTopY - dynamicRowHeight;
-      
+
         // Adjusted text position for centering within the row
-        const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 10;
-      
+        const textStartY = rowTopY - dynamicRowHeight / 2 + lineHeight / 2 - 10;
+
         // Draw text for each column (Perfectly centered)
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
@@ -313,19 +316,19 @@ exports.handler = async (event) => {
           font: timesRomanFont,
           color: blackColor,
         });
-      
+
         // Adjust Description Column Y-Position
         descriptionLines.forEach((line, index) => {
           // Adjust the Y-position to ensure no extra space at the top
           currentPage.drawText(line, {
             x: tableXPositions[1] + cellPadding,
-            y: textStartY - index * lineHeight - moveUpAmount,  // Apply moveUpAmount here to reduce top space
+            y: textStartY - index * lineHeight - moveUpAmount, // Apply moveUpAmount here to reduce top space
             size: 9,
             font: timesRomanFont,
             color: blackColor,
           });
         });
-      
+
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
             x: tableXPositions[2] + cellPadding,
@@ -335,7 +338,7 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
-      
+
         currentPage.drawText(item.Quantity, {
           x: tableXPositions[3] + cellPadding,
           y: textStartY,
@@ -343,7 +346,7 @@ exports.handler = async (event) => {
           font: timesRomanFont,
           color: blackColor,
         });
-      
+
         WorkOrderLines.forEach((line, index) => {
           currentPage.drawText(line, {
             x: tableXPositions[4] + cellPadding,
@@ -353,7 +356,7 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
-      
+
         // Draw horizontal line below the row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowBottomY },
@@ -364,7 +367,7 @@ exports.handler = async (event) => {
           thickness: 1,
           color: blackColor,
         });
-      
+
         // Fix vertical lines to align properly
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
@@ -374,7 +377,7 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
-      
+
         // Right border for each row
         currentPage.drawLine({
           start: {
@@ -388,12 +391,11 @@ exports.handler = async (event) => {
           thickness: 1,
           color: blackColor,
         });
-      
+
         itemY = rowBottomY; // Move to the next row
       });
-      
-      itemY -= 20;
 
+      itemY -= 20;
 
       // Signature section
       if (itemY - 60 < footerSpace) {
@@ -434,7 +436,7 @@ exports.handler = async (event) => {
       if (isComments) {
         currentPage.drawText("Note:", {
           x: 50,
-          y: itemY + 10,
+          y: itemY + 20, // Adjust this value to move the note down
           size: 14,
           font: timesRomanFontBold,
           color: blackColor,
@@ -615,19 +617,19 @@ exports.handler = async (event) => {
         "Quantity",
         "WorkOrderId",
       ];
-      
+
       const tableXPositions = [25, 60, 280, 430, 480];
       const maxWidthForColumns = [30, 430, 140, 180, 100]; // Adjusted max width for Description column
-      
-      const rowHeight = 25;  // Row height set to 25
-      const cellPadding = 2;  // Padding set to 2
+
+      const rowHeight = 25; // Row height set to 25
+      const cellPadding = 2; // Padding set to 2
       const minRowHeight = 18; // Minimum row height
-      const lineHeight = 10;  // Line height set to 10
-      
+      const lineHeight = 10; // Line height set to 10
+
       // let itemY = 740; // Example starting position for Y coordinate
       let currentPageNumber = 1;
       let isNextPageNeeded = false;
-      
+
       // Draw table headers with padding and borders
       tableHeaders.forEach((header, index) => {
         currentPage.drawText(header, {
@@ -638,7 +640,7 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       });
-      
+
       // Draw horizontal line above header row (top border)
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY + rowHeight / 2 },
@@ -649,7 +651,7 @@ exports.handler = async (event) => {
         thickness: 1,
         color: blackColor,
       });
-      
+
       // Draw horizontal line below header row (bottom border)
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY - rowHeight / 2 },
@@ -660,7 +662,7 @@ exports.handler = async (event) => {
         thickness: 1,
         color: blackColor,
       });
-      
+
       // Draw vertical lines for header columns (excluding right line)
       tableXPositions.forEach((xPos) => {
         currentPage.drawLine({
@@ -670,7 +672,7 @@ exports.handler = async (event) => {
           color: blackColor,
         });
       });
-      
+
       // Draw right vertical line after the header
       currentPage.drawLine({
         start: {
@@ -684,7 +686,7 @@ exports.handler = async (event) => {
         thickness: 1,
         color: blackColor,
       });
-      
+
       // Draw rows with padding and borders
       itemY -= rowHeight;
       listItems.forEach((item) => {
@@ -696,32 +698,45 @@ exports.handler = async (event) => {
             font: timesRomanFontBold,
             color: blackColor,
           });
-      
+
           itemY -= 20; // Adjust Y to start content below the message
           // Add a new page when space is insufficient
           currentPage = pdfDoc.addPage();
           currentPageNumber++; // Increment page number
           itemY = 740; // Reset Y position for the new page
-      
+
           // Set isNextPageNeeded to false after message is drawn
           isNextPageNeeded = false;
         }
-      
+
         const rowTextY = itemY;
         const ItemCodeLines = splitText(item.ItemCode, 150, 9, timesRomanFont);
-        const descriptionLines = splitText(item.Description, maxWidthForColumns[1], 9, timesRomanFont); // Full width for description
-        const WorkOrderLines = splitText(item.WorkOrderId, 100, 9, timesRomanFont);
-      
+        const descriptionLines = splitText(
+          item.Description,
+          maxWidthForColumns[1],
+          9,
+          timesRomanFont
+        ); // Full width for description
+        const WorkOrderLines = splitText(
+          item.WorkOrderId,
+          100,
+          9,
+          timesRomanFont
+        );
+
         const maxLinesInRow = Math.max(
           ItemCodeLines.length,
           WorkOrderLines.length,
           descriptionLines.length,
           1 // Ensure there's at least one line for each field
         );
-      
+
         // Dynamic row height, considering line height and padding
-        const dynamicRowHeight = Math.max(maxLinesInRow * lineHeight + 15, minRowHeight); // Ensure the row height doesn't go below minRowHeight
-      
+        const dynamicRowHeight = Math.max(
+          maxLinesInRow * lineHeight + 15,
+          minRowHeight
+        ); // Ensure the row height doesn't go below minRowHeight
+
         // Draw each cell's content with padding
         currentPage.drawText(item.SNO, {
           x: tableXPositions[0] + cellPadding,
@@ -730,7 +745,7 @@ exports.handler = async (event) => {
           font: timesRomanFont,
           color: blackColor,
         });
-      
+
         ItemCodeLines.forEach((line, index) => {
           currentPage.drawText(line, {
             x: tableXPositions[2] + cellPadding,
@@ -740,7 +755,7 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
-      
+
         WorkOrderLines.forEach((line, index) => {
           currentPage.drawText(line, {
             x: tableXPositions[4] + cellPadding,
@@ -750,7 +765,7 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
-      
+
         // Draw cell content for Description
         descriptionLines.forEach((line, index) => {
           currentPage.drawText(line, {
@@ -761,7 +776,7 @@ exports.handler = async (event) => {
             color: blackColor,
           });
         });
-      
+
         currentPage.drawText(item.Quantity, {
           x: tableXPositions[3] + cellPadding,
           y: rowTextY,
@@ -769,7 +784,7 @@ exports.handler = async (event) => {
           font: timesRomanFont,
           color: blackColor,
         });
-      
+
         // Draw horizontal line below each row
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowTextY - dynamicRowHeight / 2 },
@@ -780,7 +795,7 @@ exports.handler = async (event) => {
           thickness: 1,
           color: blackColor,
         });
-      
+
         // Draw vertical lines for each row cell, including right border
         tableXPositions.forEach((xPos) => {
           currentPage.drawLine({
@@ -802,12 +817,11 @@ exports.handler = async (event) => {
           thickness: 1,
           color: blackColor,
         });
-      
+
         itemY -= dynamicRowHeight;
       });
-      
+
       itemY -= 20; // Space after rows before next content
-      
 
       // Signature section
       if (itemY - 60 < footerSpace) {
