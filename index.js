@@ -844,7 +844,7 @@ exports.handler = async (event) => {
         itemY = 740;
       }
 
-      const maxWidthComments = 900; // Adjust width as needed
+      const maxWidthComments = 600; // Adjust width as needed
       console.log(Comments);
       const isComments = Comments ? true : false; // True if comments exist
 
@@ -860,44 +860,46 @@ exports.handler = async (event) => {
       } else {
         textLinesComments = [""]; // Default to empty if no comments
       }
+
       if (isComments) {
         currentPage.drawText("Note:", {
-          x: 50,
-          y: itemY + 10,
+          x: 20,
+          y: itemY - 6, // Adjust this value to move the note down
           size: 14,
           font: timesRomanFontBold,
           color: blackColor,
         });
       }
 
-      console.log(textLinesComments);
       for (const line of textLinesComments) {
         currentPage.drawText(line, {
-          x: 85,
-          y: itemY + 10,
+          x: 55, // X-position remains the same
+          y: itemY - 6, // Adjusted Y-position for alignment
           size: 12,
           font: timesRomanFont,
           color: blackColor,
         });
-        itemY -= 8;
+      
+        // Move itemY down for the next line
+        itemY -= 16;
       }
 
       currentPage.drawText("For Sri Mahalakshmi Engineering Works,", {
-        x: 50,
+        x: 20,
         y: itemY - 20,
         size: 12,
         font: timesRomanFontBold,
         color: blackColor,
       });
       currentPage.drawText("Authorized Signature", {
-        x: 50,
+        x: 20,
         y: itemY - 35,
         size: 12,
         font: timesRomanFont,
         color: blackColor,
       });
 
-      currentPage.drawText("Receiver Name and Signature ,", {
+      currentPage.drawText("Receiver Name and Signature ", {
         x: 350,
         y: itemY - 20,
         size: 12,
@@ -905,8 +907,8 @@ exports.handler = async (event) => {
         color: blackColor,
       });
 
-      currentPage.drawText("Checked By,", {
-        x: 50,
+      currentPage.drawText("Checked By", {
+        x: 20,
         y: itemY - 80,
         size: 12,
         font: timesRomanFontBold,
@@ -914,7 +916,7 @@ exports.handler = async (event) => {
       });
 
       currentPage.drawText("Note: This is Auto computer generated gatepass", {
-        x: 50,
+        x: 20,
         y: itemY - 110,
         size: 8,
         font: timesRomanFont,
