@@ -182,7 +182,7 @@ exports.handler = async (event) => {
         "Item Code",
         "Quantity",
         "WorkOrderId",
-      ];
+    ];
     const tableXPositions = [25, 60, 280, 430, 480];
     const maxWidthForColumns = [30, 80, 140, 180, 100];
     
@@ -275,7 +275,7 @@ exports.handler = async (event) => {
         maxWidthForColumns[1] * 2.2, // Increase width by 10%
         9,
         timesRomanFont
-    );
+      );
       const ItemCodeLines = splitText(
         item.ItemCode,
         maxWidthForColumns[2],
@@ -289,21 +289,20 @@ exports.handler = async (event) => {
         timesRomanFont
       );
     
+      // Calculate max lines per row
       const maxLinesInRow = Math.max(
+        descriptionLines.length,
         ItemCodeLines.length,
         WorkOrderLines.length,
-        descriptionLines.length,
         1
       );
     
-      // Adjust row height dynamically based on content
-      const dynamicRowHeight = Math.max(
-        minRowHeight,
-        maxLinesInRow * lineHeight + 8
-      );
+      // Dynamically calculate row height based on the longest column text
+      const extraSpacing = (maxLinesInRow - 1) * 6; // 6px extra per additional line
+      const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow * lineHeight + extraSpacing);
       const rowBottomY = rowTopY - dynamicRowHeight;
     
-      // Adjusted text position by moving it slightly down
+      // Adjusted text position for centering within the row
       const textStartY = rowTopY - (dynamicRowHeight / 2) + (lineHeight / 2) - 6;
     
       // Draw text for each column (Perfectly centered)
@@ -392,6 +391,7 @@ exports.handler = async (event) => {
     });
     
     itemY -= 20;
+    
     
       
     
