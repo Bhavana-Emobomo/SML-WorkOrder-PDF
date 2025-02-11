@@ -184,7 +184,7 @@ exports.handler = async (event) => {
         "WorkOrderId",
       ];
       const tableXPositions = [28, 55, 233, 403, 468]; // Updated positions  
-      const maxWidthForColumns = [25, 180, 170, 62, 30]; // Updated max widths// Adjusted max widths
+      const maxWidthForColumns = [25, 178, 170, 62, 30]; // Updated max widths// Adjusted max widths
 
       const rowHeight = 25;
       const cellPadding = 2;
@@ -216,7 +216,7 @@ exports.handler = async (event) => {
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: headerBottomY },
         end: {
-          x: tableXPositions[tableXPositions.length - 1],
+          x: tableXPositions[tableXPositions.length - 1] + 100,
           y: headerBottomY,
         },
         thickness: 1,
@@ -236,11 +236,11 @@ exports.handler = async (event) => {
       // Right border for header
       currentPage.drawLine({
         start: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] ,
           y: itemY,
         },
         end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] ,
           y: headerBottomY,
         },
         thickness: 1,
