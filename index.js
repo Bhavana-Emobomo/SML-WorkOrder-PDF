@@ -700,10 +700,10 @@ exports.handler = async (event) => {
         const poDateFormatted = convertToDDMMYYYY(item.PODate);
       
         // Calculate max lines per row
-        const maxLinesInRow = Math.max(descriptionLines.length, itemCodeLines.length, poNumberLines.length, 1);
+        const maxLinesInRow = Math.max(descriptionLines.length, itemCodeLines.length, poNumberLines.length, 2);
       
         // Dynamic row height based on first table styling
-        const extraSpacing = maxLinesInRow > 1 ? (maxLinesInRow - 1) * 15 : ""; // 6px extra per additional line
+        const extraSpacing = (maxLinesInRow - 1) * 15; // 6px extra per additional line
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
