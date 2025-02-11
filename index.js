@@ -184,7 +184,7 @@ exports.handler = async (event) => {
         "WorkOrderId",
       ];
       const tableXPositions = [25, 60, 280, 430, 480];
-      const maxWidthForColumns = [30, 80, 160, 180, 80];
+      const maxWidthForColumns = [30, 80, 190, 180, 50];
 
       const rowHeight = 25;
       const cellPadding = 2;
@@ -272,7 +272,7 @@ exports.handler = async (event) => {
         // Split text for wrapping
         const descriptionLines = splitText(
           item.Description,
-          maxWidthForColumns[1] * 2.2, // Increase width by 10%
+          maxWidthForColumns[1], // Increase width by 10%
           9,
           timesRomanFont
         );
