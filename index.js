@@ -358,7 +358,7 @@ exports.handler = async (event) => {
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowBottomY },
           end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
+            x: tableXPositions[tableXPositions.length - 1] + 50,
             y: rowBottomY,
           },
           thickness: 1,
