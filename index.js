@@ -216,7 +216,7 @@ exports.handler = async (event) => {
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: headerBottomY },
         end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] + 60,
           y: headerBottomY,
         },
         thickness: 1,
@@ -236,11 +236,11 @@ exports.handler = async (event) => {
       // Right border for header
       currentPage.drawLine({
         start: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] + 60,
           y: itemY,
         },
         end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] + 60,
           y: headerBottomY,
         },
         thickness: 1,
@@ -358,7 +358,7 @@ exports.handler = async (event) => {
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowBottomY },
           end: {
-            x: tableXPositions[tableXPositions.length - 1] + 50,
+            x: tableXPositions[tableXPositions.length - 1] + 60,
             y: rowBottomY,
           },
           thickness: 1,
@@ -378,11 +378,11 @@ exports.handler = async (event) => {
         // Right border for each row
         currentPage.drawLine({
           start: {
-            x: tableXPositions[tableXPositions.length - 1] + 50,
+            x: tableXPositions[tableXPositions.length - 1] + 60,
             y: rowTopY,
           },
           end: {
-            x: tableXPositions[tableXPositions.length - 1] + 50,
+            x: tableXPositions[tableXPositions.length - 1] + 60,
             y: rowBottomY,
           },
           thickness: 1,
