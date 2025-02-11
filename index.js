@@ -621,8 +621,8 @@ exports.handler = async (event) => {
         "PO Date",
       ];
 
-      const tableXPositions = [28, 70, 230, 370, 420, 468];
-      const maxWidthForColumns = [30, 80, 140, 180, 60, 38];
+      const tableXPositions = [28, 58, 198, 338, 398, 438]; // Updated positions
+      const maxWidthForColumns = [30, 140, 140, 60, 40, 30];
 
       const rowHeight = 25;
       const cellPadding = 2;
@@ -708,7 +708,7 @@ exports.handler = async (event) => {
         // Split text for wrapping (keeping first table's text wrapping)
         const descriptionLines = splitText(
           item.Description,
-          maxWidthForColumns[1] * 1.9,
+          maxWidthForColumns[1],
           9,
           timesRomanFont
         );
