@@ -183,22 +183,8 @@ exports.handler = async (event) => {
         "Quantity",
         "WorkOrderId",
       ];
-      const startPosition = 28;
-
-      // Widths of the columns
-      const maxWidthForColumns = [20, 180, 180, 30, 30];
-
-      // Array to store the start positions for each column
-      const tableXPositions = [];
-
-      // Calculate the starting positions
-      let currentPosition = startPosition;
-      maxWidthForColumns.forEach((width) => {
-        tableXPositions.push(currentPosition); // Store the starting position
-        currentPosition += width; // Move to the next column's start position
-      });
-
-      console.log(tableXPositions);
+      const tableXPositions = [25, 60, 280, 430, 480];
+      const maxWidthForColumns = [30, 80, 190, 180, 50];
 
       const rowHeight = 25;
       const cellPadding = 2;
@@ -635,8 +621,8 @@ exports.handler = async (event) => {
         "PO Date",
       ];
 
-      const tableXPositions = [28, 70, 230, 370, 420, 468]; // Last column adjusted to 468
-      const maxWidthForColumns = [30, 80, 140, 180, 40, 48];
+      const tableXPositions = [28, 70, 230, 370, 420, 468];
+      const maxWidthForColumns = [30, 80, 140, 180, 60, 48];
 
       const rowHeight = 25;
       const cellPadding = 2;
