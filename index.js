@@ -272,7 +272,7 @@ exports.handler = async (event) => {
         // Split text for wrapping
         const descriptionLines = splitText(
           item.Description,
-          maxWidthForColumns[1], // Increase width by 10%
+          maxWidthForColumns[1] * 2.5, // Increase width by 10%
           9,
           timesRomanFont
         );
