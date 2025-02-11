@@ -619,7 +619,7 @@ exports.handler = async (event) => {
       ];
       
       const tableXPositions = [28, 70, 230, 350, 400, 490];
-      const maxWidthForColumns = [30, 80, 140, 180, 100, 100];
+      const maxWidthForColumns = [30, 80, 140, 180, 100, 50];
       
       const rowHeight = 25;
       const cellPadding = 2;
