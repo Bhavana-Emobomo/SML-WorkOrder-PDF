@@ -703,12 +703,12 @@ exports.handler = async (event) => {
         const maxLinesInRow = Math.max(descriptionLines.length, itemCodeLines.length, poNumberLines.length, 1);
       
         // Dynamic row height based on first table styling
-        const extraSpacing = (maxLinesInRow - 1) * 15; // 6px extra per additional line
+        const extraSpacing = maxLinesInRow > 1 ? (maxLinesInRow - 1) * 15 : ""; // 6px extra per additional line
         const dynamicRowHeight = Math.max(minRowHeight, maxLinesInRow + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
         // Adjusted text position for centering within the row
-        const textStartY = rowTopY + (dynamicRowHeight / 50) - 12;
+        const textStartY = rowTopY + (dynamicRowHeight/ 2) - 12;
       
         // Draw text for each column
         currentPage.drawText(item.SNO, {
@@ -924,32 +924,32 @@ exports.handler = async (event) => {
 // const fs = require("fs");
 // const { PDFDocument } = require("pdf-lib");
 
-async function base64ToPDF(inputFile, outputFile) {
-  try {
-    // Read the Base64 string from the file
-    const base64String = fs.readFileSync(inputFile, "utf-8").trim();
+// async function base64ToPDF(inputFile, outputFile) {
+//   try {
+//     // Read the Base64 string from the file
+//     const base64String = fs.readFileSync(inputFile, "utf-8").trim();
 
-    // Remove metadata if present (like 'data:application/pdf;base64,')
-    const base64Data = base64String.replace(
-      /^data:application\/pdf;base64,/,
-      ""
-    );
+//     // Remove metadata if present (like 'data:application/pdf;base64,')
+//     const base64Data = base64String.replace(
+//       /^data:application\/pdf;base64,/,
+//       ""
+//     );
 
-    // Convert Base64 string to a Uint8Array (binary data)
-    const pdfBytes = Buffer.from(base64Data, "base64");
+//     // Convert Base64 string to a Uint8Array (binary data)
+//     const pdfBytes = Buffer.from(base64Data, "base64");
 
-    // Load PDF document from the decoded bytes
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+//     // Load PDF document from the decoded bytes
+//     const pdfDoc = await PDFDocument.load(pdfBytes);
 
-    // Save the PDF document
-    const savedPdfBytes = await pdfDoc.save();
-    fs.writeFileSync(outputFile, savedPdfBytes);
+//     // Save the PDF document
+//     const savedPdfBytes = await pdfDoc.save();
+//     fs.writeFileSync(outputFile, savedPdfBytes);
 
-    console.log(`✅ PDF successfully created: ${outputFile}`);
-  } catch (error) {
-    console.error("❌ Error converting Base64 to PDF:", error.message);
-  }
-}
+//     console.log(`✅ PDF successfully created: ${outputFile}`);
+//   } catch (error) {
+//     console.error("❌ Error converting Base64 to PDF:", error.message);
+//   }
+// }
 
-// // Example Usage
-base64ToPDF("pdfBase64.txt", "output.pdf");
+// // // Example Usage
+// base64ToPDF("pdfBase64.txt", "output.pdf");
