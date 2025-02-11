@@ -621,8 +621,8 @@ exports.handler = async (event) => {
         "PO Date",
       ];
 
-      const tableXPositions = [28, 70, 230, 370, 420, 470]; // Adjusted to ensure no overlap, last column at 470
-      const maxWidthForColumns = [30, 80, 140, 180, 100, 50];
+      const tableXPositions = [28, 70, 230, 370, 420, 468]; // Last column adjusted to 468
+      const maxWidthForColumns = [30, 80, 140, 180, 100, 48];
 
       const rowHeight = 25;
       const cellPadding = 2;
