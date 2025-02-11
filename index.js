@@ -703,7 +703,7 @@ exports.handler = async (event) => {
         const maxLinesInRow = Math.max(descriptionLines.length, itemCodeLines.length, poNumberLines.length, 1);
       
         // Dynamic row height based on first table styling
-        const extraSpacing = maxLinesInRow > 1 ? (maxLinesInRow + 1) * 15 : 5; // 6px extra per additional line
+        const extraSpacing = maxLinesInRow > 1 ? (maxLinesInRow + 1) * 8 : 5; // 6px extra per additional line
         const dynamicRowHeight = Math.max(minRowHeight, (maxLinesInRow * (lineHeight - 8)) + extraSpacing);
         const rowBottomY = rowTopY - dynamicRowHeight;
       
