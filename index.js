@@ -464,7 +464,7 @@ exports.handler = async (event) => {
       //   color: blackColor,
       // });
 
-      currentPage.drawText("For Sri Mahalakshmi Engineering Works,", {
+      currentPage.drawText("For Sri Mahalakshmi Engineering Works", {
         x: 20,
         y: itemY - 20,
         size: 12,
@@ -487,7 +487,7 @@ exports.handler = async (event) => {
         color: blackColor,
       });
 
-      currentPage.drawText("Checked By,", {
+      currentPage.drawText("Checked By", {
         x: 20,
         y: itemY - 80,
         size: 14,
@@ -616,13 +616,13 @@ exports.handler = async (event) => {
         "SNO",
         "Description",
         "Item Code",
-        "Quantity",
+        "Qty",
         "Po Number",
         "PO Date",
       ];
 
-      const tableXPositions = [25, 60, 220, 340, 390, 480];
-      const maxWidthForColumns = [30, 80, 140, 180, 100, 100];
+      const tableXPositions = [28, 48, 168, 348, 368, 468]; // Adjusted positions
+      const maxWidthForColumns = [20, 120, 180, 20, 100, 100];
 
       const rowHeight = 25;
       const cellPadding = 2;
@@ -646,14 +646,14 @@ exports.handler = async (event) => {
       const headerBottomY = itemY - rowHeight;
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: itemY },
-        end: { x: tableXPositions[tableXPositions.length - 1] + 100, y: itemY },
+        end: { x: tableXPositions[tableXPositions.length - 1] + 50, y: itemY },
         thickness: 1,
         color: blackColor,
       });
       currentPage.drawLine({
         start: { x: tableXPositions[0], y: headerBottomY },
         end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] + 50,
           y: headerBottomY,
         },
         thickness: 1,
@@ -673,11 +673,11 @@ exports.handler = async (event) => {
       // Right border for header
       currentPage.drawLine({
         start: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] + 50,
           y: itemY,
         },
         end: {
-          x: tableXPositions[tableXPositions.length - 1] + 100,
+          x: tableXPositions[tableXPositions.length - 1] + 50,
           y: headerBottomY,
         },
         thickness: 1,
@@ -809,7 +809,7 @@ exports.handler = async (event) => {
         currentPage.drawLine({
           start: { x: tableXPositions[0], y: rowBottomY },
           end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
+            x: tableXPositions[tableXPositions.length - 1] + 50,
             y: rowBottomY,
           },
           thickness: 1,
@@ -829,11 +829,11 @@ exports.handler = async (event) => {
         // Right border for each row
         currentPage.drawLine({
           start: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
+            x: tableXPositions[tableXPositions.length - 1] + 50,
             y: rowTopY,
           },
           end: {
-            x: tableXPositions[tableXPositions.length - 1] + 100,
+            x: tableXPositions[tableXPositions.length - 1] + 50,
             y: rowBottomY,
           },
           thickness: 1,
