@@ -180,11 +180,11 @@ exports.handler = async (event) => {
         "SNO",
         "Description",
         "Item Code",
-        "Quantity",
+        "Qty",
         "WorkOrderId",
       ];
       const tableXPositions = [28, 55, 256, 460, 508]; // Adjusted positions
-      const maxWidthForColumns = [25, 195, 185, 40, 30]; // Updated max widths// Adjusted max widths
+      const maxWidthForColumns = [25, 195, 185, 30, 30]; // Updated max widths// Adjusted max widths
 
       const rowHeight = 25;
       const cellPadding = 2;
