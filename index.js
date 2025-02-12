@@ -184,7 +184,7 @@ exports.handler = async (event) => {
         "WorkOrderId",
       ];
       const tableXPositions = [28, 55, 265, 475, 508]; // Adjusted positions
-      const maxWidthForColumns = [25, 205, 203, 20, 30]; // Updated widths
+      const maxWidthForColumns = [25, 205, 203, 30, 30]; // Updated widths
 
       const rowHeight = 25;
       const cellPadding = 2;
@@ -905,7 +905,7 @@ exports.handler = async (event) => {
         itemY -= 16;
       }
 
-      currentPage.drawText("For Sri Mahalakshmi Engineering Works,", {
+      currentPage.drawText("For Sri Mahalakshmi Engineering Works", {
         x: 20,
         y: itemY - 20,
         size: 12,
