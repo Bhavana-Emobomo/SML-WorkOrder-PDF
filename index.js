@@ -621,7 +621,7 @@ exports.handler = async (event) => {
         "PO Date",
       ];
 
-      const tableXPositions = [28, 53, 178, 368, 388, 550]; // Adjusted positions
+      const tableXPositions = [28, 53, 178, 368, 388, 520]; // Adjusted positions
       const maxWidthForColumns = [25, 123, 190, 20, 100, 100];
 
       const rowHeight = 25;
