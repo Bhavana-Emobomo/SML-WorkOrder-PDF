@@ -622,7 +622,7 @@ exports.handler = async (event) => {
       ];
 
       const tableXPositions = [28, 52, 212, 372, 402, 518]; // Adjusted to fit within the range
-      const maxWidthForColumns = [24, 157, 157, 30, 110, 20];
+      const maxWidthForColumns = [24, 155, 155, 30, 110, 20];
 
       const rowHeight = 25;
       const cellPadding = 2;
